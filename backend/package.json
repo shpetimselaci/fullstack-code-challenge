@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "Clinicist GraphQL API",
+  "main": "index.ts",
+  "scripts": {
+    "watch:dist": "node --watch dist/index.js",
+    "watch:tsc": "tsc -w",
+    "dev": "tsc && concurrently \"npm run watch:tsc\" \"npm run watch:dist\" "
+  },
+  "author": "Shpetim Selaci",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "typescript": "^5.4.5",
+    "umzug": "^3.8.1"
+  },
+  "type": "module",
+  "dependencies": {
+    "@apollo/server": "^4.10.4",
+    "graphql": "^16.8.2"
+  }
+}
