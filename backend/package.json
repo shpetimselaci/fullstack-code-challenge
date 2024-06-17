@@ -4,13 +4,14 @@
   "description": "Clinicist GraphQL API",
   "main": "index.ts",
   "scripts": {
-    "dev": "npm run watch",
+    "dev": "npm run migrations:up && npm run watch",
     "watch": "nodemon -e ts,js,gql -w . -x npm run serve",
     "serve": "ts-node -r dotenv/config ./index.ts",
     "lint": "eslint . --fix",
     "prettier": "prettier . --write",
     "generate": "ts-node scripts/init-schema.ts && graphql-codegen",
-    "generate:migrations": "drizzle-kit generate"
+    "generate:migrations": "drizzle-kit generate",
+    "migrations:up": "ts-node scripts/run-migrations.ts"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",
