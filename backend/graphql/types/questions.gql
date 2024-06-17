@@ -3,6 +3,6 @@ type Question {
   title: String!
   description: String!
   author: User!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }

@@ -5,4 +5,6 @@ import { queryDefs } from './queries';
 
 import { typeDefs } from './types';
 
-export default gql([...typeDefs, ...queryDefs, ...mutationDefs].join(' '));
+export const graphqlSchema = [...typeDefs, ...queryDefs, ...mutationDefs].join('\n');
+
+export default gql(graphqlSchema);

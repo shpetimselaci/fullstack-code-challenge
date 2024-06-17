@@ -1,6 +1,9 @@
 // import * as userService from '../../services/users';
 
-const resolvers = {
+import { BaseContext } from '@apollo/server';
+import { Resolvers } from '../../types';
+
+const resolvers: Resolvers<BaseContext> = {
   Query: {},
 };
 

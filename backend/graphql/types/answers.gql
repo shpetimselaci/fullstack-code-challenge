@@ -3,6 +3,6 @@ type Answer {
   answer: String!
   question: Question!
   creatorId: User!
-  createdAt: String!
-  updatedAt: String!
+  createdAt: Date!
+  updatedAt: Date!
 }
