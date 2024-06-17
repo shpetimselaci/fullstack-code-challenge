@@ -8,12 +8,17 @@
     "watch": "nodemon -e ts,js,gql -w . -x npm run serve",
     "serve": "ts-node -r dotenv/config ./index.ts",
     "lint": "eslint . --fix",
-    "prettier": "prettier . --write"
+    "prettier": "prettier . --write",
+    "generate": "ts-node scripts/init-schema.ts && graphql-codegen",
+    "postinstall": "npm run generate"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",
   "devDependencies": {
     "@eslint/js": "^9.5.0",
+    "@graphql-codegen/cli": "^5.0.2",
+    "@graphql-codegen/typescript": "^4.0.7",
+    "@graphql-codegen/typescript-resolvers": "^4.1.0",
     "@types/eslint__js": "^8.42.3",
     "@types/pg": "^8.11.6",
     "concurrently": "^8.2.2",
