@@ -5,8 +5,3 @@ type User {
   createdAt: String!
   updatedAt: String!
 }
-
-extend type Query {
-  users: [User!]!
-  userAnswers: [Answer!]!
-}
