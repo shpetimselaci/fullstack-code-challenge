@@ -1,0 +1,5 @@
+extend type Mutation {
+  addQuestion(title: String!, description: String!): Question!
+  editQuestion(questionId: ID!, title: String!, description: String!): Question!
+  deleteQuestion(questionId: ID!): Question!
+}

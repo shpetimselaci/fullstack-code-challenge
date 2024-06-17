@@ -1,4 +1,3 @@
 extend type Query {
-  questionAnswers: [Answer!]!
-  userQuestions: [Question!]!
+  questionAnswers(id: ID!): [Answer!]!
 }
