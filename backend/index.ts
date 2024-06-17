@@ -1,5 +1,5 @@
 import { ApolloServer } from '@apollo/server';
-import typeDefs from './types';
+import typeDefs from './graphql';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { runtimeLogger } from './loggers/services';
 

@@ -1,0 +1,4 @@
+extend type Query {
+  questionAnswers: [Answer!]!
+  userQuestions: [Question!]!
+}
