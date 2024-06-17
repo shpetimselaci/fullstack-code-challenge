@@ -6,18 +6,31 @@
   "scripts": {
     "watch:dist": "node --watch dist/index.js",
     "watch:tsc": "tsc -w",
-    "dev": "tsc && concurrently \"npm run watch:tsc\" \"npm run watch:dist\" "
+    "dev": "tsc && concurrently \"npm run watch:tsc\" \"npm run watch:dist\" ",
+    "lint": "eslint . --fix",
+    "prettier": "prettier . --write"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",
   "devDependencies": {
+    "@eslint/js": "^9.5.0",
+    "@types/eslint__js": "^8.42.3",
+    "@types/pg": "^8.11.6",
     "concurrently": "^8.2.2",
+    "drizzle-kit": "^0.22.7",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "prettier": "^3.3.2",
     "typescript": "^5.4.5",
-    "umzug": "^3.8.1"
+    "typescript-eslint": "^7.13.0"
   },
   "type": "module",
   "dependencies": {
     "@apollo/server": "^4.10.4",
-    "graphql": "^16.8.2"
+    "drizzle-orm": "^0.31.2",
+    "graphql": "^16.8.2",
+    "pg": "^8.12.0",
+    "zod": "^3.23.8"
   }
 }
