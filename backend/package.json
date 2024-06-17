@@ -9,7 +9,8 @@
     "serve": "ts-node -r dotenv/config ./index.ts",
     "lint": "eslint . --fix",
     "prettier": "prettier . --write",
-    "generate": "ts-node scripts/init-schema.ts && graphql-codegen"
+    "generate": "ts-node scripts/init-schema.ts && graphql-codegen",
+    "generate:migrations": "drizzle-kit generate"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",

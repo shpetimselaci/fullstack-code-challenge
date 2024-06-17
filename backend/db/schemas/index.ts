@@ -1,3 +1,3 @@
-import './users';
-import './answers';
-import './questions';
+export * from './users';
+export * from './answers';
+export * from './questions';
