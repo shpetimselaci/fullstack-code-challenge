@@ -1,5 +1,5 @@
 extend type Query {
-  users: [User!]!
-  userAnswers(userId: ID!): [Answer!]!
-  userQuestions(userId: ID!): [Question!]!
+  users(limit: Int, offset: Int): [User!]!
+  userAnswers(userId: ID!, limit: Int, offset: Int): [Answer!]!
+  userQuestions(userId: ID!, limit: Int, offset: Int): [Question!]!
 }

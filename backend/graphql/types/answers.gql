@@ -1,8 +1,8 @@
 type Answer {
   id: Int!
   answer: String!
-  questionId: Int!
-  creatorId: Int!
+  question: Question!
+  creatorId: User!
   createdAt: String!
   updatedAt: String!
 }
