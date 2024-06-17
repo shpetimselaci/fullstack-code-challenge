@@ -5,11 +5,15 @@ import { BaseContext } from '@apollo/server';
 
 const resolvers: Pick<Resolvers<BaseContext>, 'Query'> = {
   Query: {
-    users: (_, { limit, offset }, { dataSources }) => {
-      return userService.listUsers({ limit, offset });
+    users: async (_, { limit, offset }, {}) => {
+      return await userService.listUsers({ limit, offset });
     },
-    userAnswers: userService.listUserAnswers,
-    userQuestions: userService.listUserQuestions,
+    userAnswers: async (_, { limit, offset, userId }, {}) => {
+      return (await userService.listUserAnswers({ userId, limit, offset })) as any;
+    },
+    userQuestions: async (_, { limit, offset, userId }, {}) => {
+      return (await userService.listUserQuestions({ userId, limit, offset })) as any;
+    },
   },
 };
 resolvers.Query?.userQuestions;
