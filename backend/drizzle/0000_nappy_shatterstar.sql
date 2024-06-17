@@ -5,9 +5,7 @@ CREATE TABLE IF NOT EXISTS "answers" (
 	"creator_id" integer NOT NULL,
 	"created_at" timestamp,
 	"updated_at" timestamp,
-	CONSTRAINT "answers_id_unique" UNIQUE("id"),
-	CONSTRAINT "question_id_answer_id_created_at" UNIQUE("id","id","created_at"),
-	CONSTRAINT "user_id_answer_id_created_at" UNIQUE("id","id","created_at")
+	CONSTRAINT "answers_id_unique" UNIQUE("id")
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "questions" (
@@ -27,3 +25,6 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"created_at" timestamp NOT NULL,
 	"updated_at" timestamp NOT NULL
 );
+--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "question_id_answer_id" ON "answers" USING btree ("question_id","id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "user_id_answer_id" ON "answers" USING btree ("creator_id","id");

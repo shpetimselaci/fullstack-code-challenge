@@ -1,5 +1,5 @@
 {
-  "id": "8598caca-f43c-4695-93c3-ac9dc08e8660",
+  "id": "f00f054b-0280-4529-97cb-491cde89e67a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -45,7 +45,50 @@
           "notNull": false
         }
       },
-      "indexes": {},
+      "indexes": {
+        "question_id_answer_id": {
+          "name": "question_id_answer_id",
+          "columns": [
+            {
+              "expression": "question_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "user_id_answer_id": {
+          "name": "user_id_answer_id",
+          "columns": [
+            {
+              "expression": "creator_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
@@ -54,24 +97,6 @@
           "nullsNotDistinct": false,
           "columns": [
             "id"
-          ]
-        },
-        "question_id_answer_id_created_at": {
-          "name": "question_id_answer_id_created_at",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id",
-            "id",
-            "created_at"
-          ]
-        },
-        "user_id_answer_id_created_at": {
-          "name": "user_id_answer_id_created_at",
-          "nullsNotDistinct": false,
-          "columns": [
-            "id",
-            "id",
-            "created_at"
           ]
         }
       }

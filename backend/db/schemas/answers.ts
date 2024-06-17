@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, timestamp, unique, varchar } from 'drizzle-orm/pg-core';
+import { integer, pgTable, serial, timestamp, index, varchar } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 import { questions } from './questions';
 import { users } from './users';
@@ -15,12 +15,8 @@ export const answers = pgTable(
   },
   (t) => {
     return {
-      questionAnswersIndex: unique('question_id_answer_id_created_at').on(
-        questions.id,
-        t.id,
-        t.createdAt,
-      ),
-      userAnswersIndex: unique('user_id_answer_id_created_at').on(users.id, t.id, t.createdAt),
+      questionAnswersIndex: index('question_id_answer_id_created_at').on(t.questionId, t.id),
+      userAnswersIndex: index('user_id_answer_id_created_at').on(t.creatorId, t.id),
     };
   },
 );
