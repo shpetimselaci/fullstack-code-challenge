@@ -19,4 +19,6 @@ COPY --from=install /temp/dev/node_modules node_modules
 ## rest of the stuff..
 COPY . .
 
+RUN npm run generate
+
 ENTRYPOINT ["npm", "run", "dev"]

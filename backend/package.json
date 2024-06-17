@@ -9,8 +9,7 @@
     "serve": "ts-node -r dotenv/config ./index.ts",
     "lint": "eslint . --fix",
     "prettier": "prettier . --write",
-    "generate": "ts-node scripts/init-schema.ts && graphql-codegen",
-    "postinstall": "npm run generate"
+    "generate": "ts-node scripts/init-schema.ts && graphql-codegen"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",

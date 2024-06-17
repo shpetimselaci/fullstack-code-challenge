@@ -1,4 +1,3 @@
-
 services:
   db:
     image: postgres
@@ -8,16 +7,19 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - ../.env
+      - .env
   backend:
     build:
       context: ./backend
-      dockerfile: ./backend/Dockerfile 
+      dockerfile: ./Dockerfile
     ports:
       - "4000:4000"
     env_file:
-      - ../.env
+      - .env
     depends_on:
       - db
     volumes:
-      - ../backend:/home/backend
+      - ./backend:/home/backend
+
+volumes:
+  postgres_data:
