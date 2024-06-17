@@ -4,7 +4,7 @@ import { answers } from './answers';
 import { users } from './users';
 
 export const questions = pgTable('questions', {
-  id: serial('id').primaryKey(),
+  id: serial('id').unique().primaryKey(),
   title: varchar('name', { length: 123 }),
   description: varchar('description', { length: 256 }),
   authorId: integer('author_id').notNull(),
@@ -19,3 +19,6 @@ export const questionsRelations = relations(questions, ({ many, one }) => ({
   }),
   answers: many(answers),
 }));
+
+export type Question = typeof questions.$inferSelect;
+export type NewQuestion = typeof questions.$inferInsert;

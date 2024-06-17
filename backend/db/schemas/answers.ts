@@ -39,3 +39,6 @@ export const answerRelation = relations(answers, ({ one }) => ({
     references: [users.id],
   }),
 }));
+
+export type Answer = typeof answers.$inferSelect;
+export type NewAnswer = typeof answers.$inferInsert;
