@@ -11,7 +11,7 @@ const resolvers: Pick<Resolvers<BaseContext>, 'Query'> = {
       return await userService.listUserAnswers({ userId, limit, offset });
     },
     userQuestions: async (_, { limit, offset, userId }, {}) => {
-      return (await userService.listUserQuestions({ userId, limit, offset })) as any;
+      return await userService.listUserQuestions({ userId, limit, offset });
     },
   },
 };
