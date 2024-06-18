@@ -2,7 +2,7 @@ import { and, eq, getTableColumns } from 'drizzle-orm';
 import { DEFAULT_LIMIT } from '../constants';
 import db from '../db';
 import { NonNullableObject, PaginationParams } from '../common/types';
-import { answers, users, questions, NewQuestion } from '../db/schemas';
+import { users, questions, NewQuestion } from '../db/schemas';
 import { alias } from 'drizzle-orm/pg-core';
 import { Question } from '../types';
 
@@ -16,7 +16,7 @@ export const listQuestions = async ({ limit, offset }: PaginationParams) => {
     })
     .from(questions)
     .where(eq(questions.deleted, false))
-    .rightJoin(authors, eq(answers.creatorId, users.id))
+    .rightJoin(authors, eq(questions.authorId, authors.id))
     .orderBy(questions.createdAt)
     .offset(offset || 0)
     .limit(limit || DEFAULT_LIMIT);

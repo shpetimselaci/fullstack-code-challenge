@@ -67,9 +67,10 @@ export const listUserQuestions = async ({
     })
     .from(questions)
     .where(eq(questions.authorId, userId))
-    .rightJoin(authors, eq(answers.creatorId, authors.id))
-    .offset(offset || DEFAULT_LIMIT)
-    .limit(limit || 0);
+    .rightJoin(authors, eq(questions.authorId, authors.id))
+    .orderBy(questions.createdAt)
+    .offset(offset || 0)
+    .limit(limit || DEFAULT_LIMIT);
 
   return userQuestions as NonNullableObject<typeof userQuestions>;
 };
