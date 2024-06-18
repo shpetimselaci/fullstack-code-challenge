@@ -24,19 +24,22 @@ export const listQuestions = async ({ limit, offset }: PaginationParams) => {
   return questionAnswers as NonNullableObject<typeof questionAnswers>;
 };
 
-type T = Required<Awaited<ReturnType<typeof listQuestions>>>;
-
 export const addQuestion = async (newQuestion: Omit<NewQuestion, 'createdAt' | 'updatedAt'>) => {
-  const newAnswer = await db
+  const insertedQuestion = await db
     .insert(questions)
     .values({
       ...newQuestion,
-      createdAt: new Date(),
-      updatedAt: new Date(),
     })
-    .returning();
+    .returning({ id: questions.id });
 
-  return newAnswer;
+  const questionToReturn = await db.query.questions.findFirst({
+    where: () => eq(questions.id, insertedQuestion[0].id),
+    with: {
+      author: true,
+    },
+  });
+
+  return questionToReturn as NonNullable<typeof questionToReturn>;
 };
 
 export const editQuestion = async ({
@@ -52,19 +55,32 @@ export const editQuestion = async ({
       description,
       updatedAt: new Date(),
     })
-    .where(and(eq(questions.id, id), eq(questions.authorId, userId)));
+    .where(and(eq(questions.id, id), eq(questions.authorId, userId)))
+    .returning({ id: questions.id });
 
-  return updatedQuestion;
+  const questionToReturn = await db.query.questions.findFirst({
+    where: () => eq(questions.id, updatedQuestion[0].id),
+    with: {
+      author: true,
+    },
+  });
+  return questionToReturn as NonNullable<typeof questionToReturn>;
 };
 
-export const deleteAnswer = async ({ id, userId }: Pick<Question, 'id'> & { userId: number }) => {
+export const deleteQuestion = async ({ id, userId }: Pick<Question, 'id'> & { userId: number }) => {
   const updatedQuestion = await db
     .update(questions)
     .set({
       deleted: true,
       updatedAt: new Date(),
     })
-    .where(and(eq(questions.id, id), eq(questions.authorId, userId)));
-
-  return updatedQuestion;
+    .where(and(eq(questions.id, id), eq(questions.authorId, userId)))
+    .returning({ id: questions.id });
+  const questionToReturn = await db.query.questions.findFirst({
+    where: () => eq(questions.id, updatedQuestion[0].id),
+    with: {
+      author: true,
+    },
+  });
+  return questionToReturn as NonNullable<typeof questionToReturn>;
 };

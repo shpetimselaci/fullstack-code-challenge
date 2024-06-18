@@ -42,16 +42,34 @@ export const listQuestionAnswers = async ({
 };
 
 export const addAnswer = async (newUser: Omit<NewAnswer, 'createdAt' | 'updatedAt'>) => {
-  const newAnswer = await db
-    .insert(answers)
-    .values({
-      ...newUser,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .returning();
+  const answerToReturn = await db.transaction(async (tx) => {
+    const newAnswer = await tx
+      .insert(answers)
+      .values({
+        ...newUser,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning({ id: answers.id });
 
-  return newAnswer;
+    return tx.query.answers.findFirst({
+      where: () => eq(answers.id, newAnswer[0].id),
+      with: {
+        author: true,
+        question: {
+          with: {
+            author: true,
+          },
+          columns: {
+            deleted: false,
+          },
+        },
+      },
+      columns: { deleted: false },
+    });
+  });
+
+  return answerToReturn as NonNullable<typeof answerToReturn>;
 };
 
 export const editAnswer = async ({
@@ -65,20 +83,52 @@ export const editAnswer = async ({
       answer,
       updatedAt: new Date(),
     })
-    .where(and(eq(answers.id, id), eq(answers.creatorId, userId), eq(answers.deleted, false)));
+    .where(and(eq(answers.id, id), eq(answers.creatorId, userId), eq(answers.deleted, false)))
+    .returning({ id: answers.id });
+
+  const answerToReturn = await db.query.answers.findFirst({
+    where: () => eq(answers.id, updatedAnswer[0].id),
+    with: {
+      author: true,
+      question: {
+        with: {
+          author: true,
+        },
+        columns: {
+          deleted: false,
+        },
+      },
+    },
+    columns: { deleted: false },
+  });
+
+  return answerToReturn as NonNullable<typeof answerToReturn>;
 };
 
-export const deleteAnswer = async ({
-  id,
-  userId,
-}: Pick<Answer, 'id' | 'answer'> & { userId: number }) => {
+export const deleteAnswer = async ({ id, userId }: Pick<Answer, 'id'> & { userId: number }) => {
   const updatedAnswer = await db
     .update(answers)
     .set({
       deleted: true,
       updatedAt: new Date(),
     })
-    .where(and(eq(answers.id, id), eq(answers.creatorId, userId)));
+    .where(and(eq(answers.id, id), eq(answers.creatorId, userId), eq(answers.deleted, false)))
+    .returning({ id: answers.id });
 
-  return updatedAnswer;
+  const answerToReturn = await db.query.answers.findFirst({
+    where: () => eq(answers.id, updatedAnswer[0].id),
+    with: {
+      author: true,
+      question: {
+        with: {
+          author: true,
+        },
+        columns: {
+          deleted: false,
+        },
+      },
+    },
+    columns: { deleted: false },
+  });
+  return answerToReturn as NonNullable<typeof answerToReturn>;
 };

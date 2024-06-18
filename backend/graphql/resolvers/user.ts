@@ -2,7 +2,7 @@ import * as userService from '../../services/users';
 import { Resolvers } from '../../types';
 import { BaseContext } from '@apollo/server';
 
-const resolvers: Pick<Resolvers<BaseContext>, 'Query'> = {
+const resolvers: Resolvers<BaseContext> = {
   Query: {
     users: async (_, { limit, offset }, {}) => {
       return await userService.listUsers({ limit, offset });
