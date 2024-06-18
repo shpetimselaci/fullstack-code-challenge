@@ -6,7 +6,7 @@ import config from '../config';
 import * as schema from '../db/schemas';
 import { faker } from '@faker-js/faker';
 import { migrate } from 'drizzle-orm/node-postgres/migrator';
-import { runtimeLogger } from '../loggers/services';
+import { runtimeLogger } from '../utils/loggers';
 
 const client = new Client(
   `postgres://${config.db.user}:${config.db.password}@${config.db.host}:${config.db.port}/${config.db.database}`,
