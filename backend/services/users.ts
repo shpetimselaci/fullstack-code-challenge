@@ -1,10 +1,11 @@
-import { eq } from 'drizzle-orm';
+import { eq, getTableColumns } from 'drizzle-orm';
 import { DEFAULT_LIMIT } from '../constants';
 import db from '../db';
 import { answers } from '../db/schemas/answers';
 import { questions } from '../db/schemas/questions';
 import { users } from '../db/schemas/users';
-import { PaginationParams } from '../common/types';
+import { NonNullableObject, PaginationParams } from '../common/types';
+import { alias } from 'drizzle-orm/pg-core';
 
 export const listUsers = async ({ limit, offset }: PaginationParams) => {
   const usersList = await db
@@ -21,16 +22,34 @@ export const listUserAnswers = async ({
   limit,
   offset,
 }: { userId: number } & PaginationParams) => {
-  const userAnswers = await db
-    .select()
-    .from(answers)
-    .where(eq(answers.creatorId, userId))
-    .leftJoin(questions, eq(answers.questionId, questions.id))
-    .rightJoin(users, eq(answers.creatorId, users.id))
-    .offset(offset || 0)
-    .limit(limit || DEFAULT_LIMIT);
+  const userAnswers = await db.query.answers.findMany({
+    columns: {
+      id: true,
+      answer: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    where: () => eq(answers.creatorId, userId),
+    with: {
+      author: true,
+      question: {
+        with: {
+          author: true,
+        },
+        columns: {
+          id: true,
+          title: true,
+          description: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+    },
+    offset: offset || 0,
+    limit: limit || DEFAULT_LIMIT,
+  });
 
-  return userAnswers;
+  return userAnswers as NonNullableObject<typeof userAnswers>;
 };
 
 export const listUserQuestions = async ({
@@ -38,13 +57,19 @@ export const listUserQuestions = async ({
   limit,
   offset,
 }: { userId: number } & PaginationParams) => {
+  const { authorId, ...columns } = await getTableColumns(questions);
+  const authors = alias(users, 'author');
+
   const userQuestions = await db
-    .select()
+    .select({
+      ...columns,
+      author: getTableColumns(authors),
+    })
     .from(questions)
     .where(eq(questions.authorId, userId))
-    .rightJoin(users, eq(answers.creatorId, users.id))
+    .rightJoin(authors, eq(answers.creatorId, authors.id))
     .offset(offset || DEFAULT_LIMIT)
     .limit(limit || 0);
 
-  return userQuestions;
+  return userQuestions as NonNullableObject<typeof userQuestions>;
 };

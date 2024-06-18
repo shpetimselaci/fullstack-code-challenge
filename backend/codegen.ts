@@ -4,6 +4,9 @@ const config: CodegenConfig = {
   schema: 'schema.graphql',
   generates: {
     './types.ts': {
+      config: {
+        useIndexSignature: true,
+      },
       plugins: ['typescript', 'typescript-resolvers'],
     },
   },

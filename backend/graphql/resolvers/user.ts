@@ -1,4 +1,3 @@
-import { GraphQLFieldResolverParams } from '@apollo/server';
 import * as userService from '../../services/users';
 import { Resolvers } from '../../types';
 import { BaseContext } from '@apollo/server';
@@ -9,7 +8,7 @@ const resolvers: Pick<Resolvers<BaseContext>, 'Query'> = {
       return await userService.listUsers({ limit, offset });
     },
     userAnswers: async (_, { limit, offset, userId }, {}) => {
-      return (await userService.listUserAnswers({ userId, limit, offset })) as any;
+      return await userService.listUserAnswers({ userId, limit, offset });
     },
     userQuestions: async (_, { limit, offset, userId }, {}) => {
       return (await userService.listUserQuestions({ userId, limit, offset })) as any;

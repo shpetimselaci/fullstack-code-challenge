@@ -2,7 +2,7 @@ type Answer {
   id: Int!
   answer: String!
   question: Question!
-  creatorId: User!
+  author: User!
   createdAt: Date!
   updatedAt: Date!
 }

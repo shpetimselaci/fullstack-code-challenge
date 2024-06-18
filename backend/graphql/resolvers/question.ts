@@ -1,10 +1,12 @@
-// import * as userService from '../../services/users';
-
-import { BaseContext } from '@apollo/server';
+import * as questionsService from '../../services/questions';
 import { Resolvers } from '../../types';
 
-const resolvers: Resolvers<BaseContext> = {
-  Query: {},
+const resolvers: Resolvers<{}> = {
+  Query: {
+    questions: async (_, { limit, offset }, {}) => {
+      return questionsService.listQuestions({ limit, offset });
+    },
+  },
 };
 
 export default resolvers;

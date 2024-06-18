@@ -4,8 +4,6 @@ import dateScalar from '../scalars/date';
 
 const resolvers: Resolvers<BaseContext> = {
   Date: dateScalar,
-  Query: {},
-  Mutation: {},
 };
 
 export default resolvers;
