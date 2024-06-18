@@ -8,7 +8,7 @@ export const users = pgTable('users', {
   name: varchar('name', { length: 256 }).notNull(),
   birthday: date('birthday', { mode: 'string' }).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({

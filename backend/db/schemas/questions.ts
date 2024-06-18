@@ -11,7 +11,7 @@ export const questions = pgTable('questions', {
   authorId: integer('author_id').notNull(),
   deleted: boolean('deleted').default(false).notNull(),
   createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 export const questionsRelations = relations(questions, ({ many, one }) => ({
