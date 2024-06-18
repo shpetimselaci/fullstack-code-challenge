@@ -8,6 +8,7 @@ const config = {
     password: environmentVariables.POSTGRES_PASSWORD,
     database: environmentVariables.POSTGRES_DB,
   },
+  version: environmentVariables.API_VERSION,
 };
 
 export default config;
