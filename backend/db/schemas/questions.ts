@@ -6,7 +6,7 @@ import { boolean } from 'drizzle-orm/pg-core';
 
 export const questions = pgTable('questions', {
   id: serial('id').unique().primaryKey().notNull(),
-  title: varchar('name', { length: 123 }).notNull(),
+  title: varchar('title', { length: 123 }).notNull(),
   description: varchar('description', { length: 512 }).notNull(),
   authorId: integer('author_id').notNull(),
   deleted: boolean('deleted').default(false).notNull(),
