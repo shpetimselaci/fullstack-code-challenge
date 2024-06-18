@@ -8,7 +8,7 @@ export const answers = pgTable(
   'answers',
   {
     id: serial('id').unique().primaryKey(),
-    answer: varchar('name', { length: 256 }).notNull(),
+    answer: varchar('name', { length: 512 }).notNull(),
     questionId: integer('question_id').notNull(),
     creatorId: integer('creator_id').notNull(),
     deleted: boolean('deleted').default(false).notNull(),
