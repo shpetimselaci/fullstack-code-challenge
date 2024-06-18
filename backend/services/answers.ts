@@ -10,10 +10,6 @@ export const listQuestionAnswers = async ({
   limit,
   offset,
 }: { id: number } & PaginationParams) => {
-  const authors = alias(users, 'author');
-
-  const { authorId, ...questionColumns } = getTableColumns(questions);
-
   const questionAnswers = await db.query.answers.findMany({
     columns: {
       id: true,
