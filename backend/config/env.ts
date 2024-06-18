@@ -6,6 +6,7 @@ const envSchema = z.object({
   POSTGRES_PASSWORD: z.string(),
   POSTGRES_HOST: z.string(),
   POSTGRES_PORT: z.coerce.number(),
+  API_VERSION: z.coerce.number(),
 });
 
 const environmentVariables = envSchema.parse(process.env);
