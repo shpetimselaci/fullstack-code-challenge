@@ -4,14 +4,15 @@
   "description": "Clinicist GraphQL API",
   "main": "index.ts",
   "scripts": {
-    "dev": "npm run migrations:up && npm run watch",
+    "dev": "npm run migrations:up && npm run seed:up && npm run watch",
     "watch": "nodemon -e ts,js,gql -w . -x npm run serve",
     "serve": "ts-node -r dotenv/config ./index.ts",
     "lint": "eslint . --fix",
     "prettier": "prettier . --write",
-    "generate": "ts-node scripts/init-schema.ts && graphql-codegen",
-    "generate:migrations": "drizzle-kit generate",
-    "migrations:up": "ts-node scripts/run-migrations.ts"
+    "generate:types": "ts-node scripts/init-schema.ts && graphql-codegen",
+    "migrations:generate": "drizzle-kit generate",
+    "migrations:up": "ts-node scripts/run-migrations.ts",
+    "seed:up": "ts-node scripts/run-seed.ts"
   },
   "author": "Shpetim Selaci",
   "license": "MIT",
@@ -35,6 +36,7 @@
   },
   "dependencies": {
     "@apollo/server": "^4.10.4",
+    "@faker-js/faker": "^8.4.1",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.31.2",
     "graphql": "^16.8.2",
