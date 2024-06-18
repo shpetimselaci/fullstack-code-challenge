@@ -22,6 +22,7 @@ const runSeed = async () => {
 
     if (dbIsDirty != null) {
       runtimeLogger.info('SEED ALREADY IN!');
+      await client.end();
       return;
     }
 
