@@ -25,6 +25,15 @@ const runSeed = async () => {
       return;
     }
 
+    const users: schema.NewUser[] = [];
+    for (let i = 0; i < 20; i++) {
+      users.push({
+        birthday: faker.date.birthdate().toISOString(),
+        name: faker.person.fullName(),
+      });
+    }
+    await db.insert(schema.users).values(users);
+
     const questions: schema.NewQuestion[] = [];
     for (let i = 0; i < 20; i++) {
       questions.push({
