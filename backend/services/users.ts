@@ -57,7 +57,7 @@ export const listUserQuestions = async ({
   limit,
   offset,
 }: { userId: number } & PaginationParams) => {
-  const { authorId, ...columns } = await getTableColumns(questions);
+  const { authorId: _authorId, ...columns } = await getTableColumns(questions);
   const authors = alias(users, 'author');
 
   const userQuestions = await db

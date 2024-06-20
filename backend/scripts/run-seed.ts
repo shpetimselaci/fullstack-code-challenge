@@ -5,7 +5,6 @@ import { Client } from 'pg';
 import config from '../config';
 import * as schema from '../db/schemas';
 import { faker } from '@faker-js/faker';
-import { migrate } from 'drizzle-orm/node-postgres/migrator';
 import { runtimeLogger } from '../utils/loggers';
 
 const client = new Client(

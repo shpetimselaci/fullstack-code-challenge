@@ -1,4 +1,4 @@
-type BaseContext = {};
+type BaseContext = object;
 
 const context: BaseContext = {};
 

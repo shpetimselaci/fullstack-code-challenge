@@ -1,9 +1,8 @@
-import { and, eq, getTableColumns } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { DEFAULT_LIMIT } from '../constants';
 import db from '../db';
 import { NonNullableObject, PaginationParams } from '../common/types';
-import { answers, users, questions, NewAnswer, Answer } from '../db/schemas';
-import { alias } from 'drizzle-orm/pg-core';
+import { answers, questions, NewAnswer, Answer } from '../db/schemas';
 
 export const listQuestionAnswers = async ({
   id,
