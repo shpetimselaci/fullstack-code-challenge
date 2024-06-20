@@ -6,8 +6,10 @@ const { includeIgnoreFile } = require('@eslint/compat');
 const path = require('node:path');
 const gitignorePath = path.resolve(__dirname, '.gitignore');
 
-console.log('includeIgnoreFile(gitignorePath)', includeIgnoreFile(gitignorePath));
 module.exports = tseslint.config(
+  {
+    ignores: [...includeIgnoreFile(gitignorePath).ignores, 'eslint.config.js'],
+  },
   eslint.configs.recommended,
   ...tseslint.configs.recommended,
   prettierConfig,
