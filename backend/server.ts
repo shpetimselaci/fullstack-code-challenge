@@ -1,7 +1,7 @@
 import { ApolloServer } from '@apollo/server';
-import { ExpressContextFunctionArgument, expressMiddleware } from '@apollo/server/express4';
+import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import express, { Request } from 'express';
+import express from 'express';
 import http from 'http';
 import pino from 'pino-http';
 import cors from 'cors';
@@ -13,8 +13,6 @@ import { httpLogger, runtimeLogger } from './utils/loggers';
 import rateLimitMiddleware from './middleware/ratelimiter';
 import authRouter from './routes/auth';
 import { authMiddleware } from './middleware/auth';
-import { verifyJWT } from './utils/auth';
-import { User } from './db/schemas';
 
 const startServer = async () => {
   const app = express();
@@ -45,7 +43,7 @@ const startServer = async () => {
 
   app.use('/auth', authRouter);
 
-  app.get('/health', (req, res) => {
+  app.get('/health', (_, res) => {
     res.status(200).send('Okay!');
   });
 
