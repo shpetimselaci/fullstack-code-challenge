@@ -3,12 +3,11 @@ import typeDefs from './graphql';
 import { startStandaloneServer } from '@apollo/server/standalone';
 import { runtimeLogger } from './utils/loggers';
 import allResolvers from './graphql/resolvers';
-import { BaseContext } from '@apollo/server';
-import { contextFn } from './context';
+import { Context, contextFn } from './graphql/context';
 
 async function startApolloServer() {
-  const server = new ApolloServer<BaseContext>({ typeDefs, resolvers: allResolvers });
-  const { url } = await startStandaloneServer(server, { context: contextFn });
+  const server = new ApolloServer<Context>({ typeDefs, resolvers: allResolvers });
+  const { url } = await startStandaloneServer<Context>(server, { context: contextFn });
   runtimeLogger.info(`
     🚀  Server is running!
     📭  Query at ${url}

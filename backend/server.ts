@@ -3,13 +3,20 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import express from 'express';
 import http from 'http';
+import pino from 'pino-http';
+import cors from 'cors';
+
 import typeDefs from './graphql';
 import allResolvers from './graphql/resolvers';
-import cors from 'cors';
-import { runtimeLogger } from './utils/loggers';
+import { httpLogger, runtimeLogger } from './utils/loggers';
 
 const startServer = async () => {
   const app = express();
+  app.use(
+    pino({
+      logger: httpLogger,
+    }),
+  );
   const httpServer = http.createServer(app);
   const server = new ApolloServer({
     typeDefs,
@@ -19,14 +26,7 @@ const startServer = async () => {
 
   await server.start();
 
-  app.use(
-    '/graphql',
-    cors<cors.CorsRequest>({
-      origin: ['https://', 'https://studio.apollographql.com'],
-    }),
-    express.json(),
-    expressMiddleware(server),
-  );
+  app.use('/graphql', cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
   app.get('/health', (req, res) => {
     res.status(200).send('Okay!');
