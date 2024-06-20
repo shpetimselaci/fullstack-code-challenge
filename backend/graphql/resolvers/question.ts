@@ -1,6 +1,6 @@
 import { BaseContext } from '@apollo/server';
 import * as questionsService from '../../services/questions';
-import { Resolvers } from '../../types';
+import { Resolvers } from '../../generated-types';
 
 const resolvers: Resolvers<BaseContext> = {
   Query: {

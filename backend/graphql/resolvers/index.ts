@@ -1,5 +1,5 @@
 import { BaseContext } from '@apollo/server';
-import { Resolvers } from '../../types';
+import { Resolvers } from '../../generated-types';
 import dateScalar from './date';
 import answersResolvers from './answer';
 import questionsResolvers from './question';

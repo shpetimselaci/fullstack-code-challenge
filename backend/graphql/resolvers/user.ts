@@ -1,5 +1,5 @@
 import * as userService from '../../services/users';
-import { Resolvers } from '../../types';
+import { Resolvers } from '../../generated-types';
 import { BaseContext } from '@apollo/server';
 
 const resolvers: Resolvers<BaseContext> = {

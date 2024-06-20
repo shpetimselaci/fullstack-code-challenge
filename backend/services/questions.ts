@@ -4,7 +4,7 @@ import db from '../db';
 import { NonNullableObject, PaginationParams } from '../common/types';
 import { users, questions, NewQuestion } from '../db/schemas';
 import { alias } from 'drizzle-orm/pg-core';
-import { Question } from '../types';
+import { Question } from '../generated-types';
 
 export const listQuestions = async ({ limit, offset }: PaginationParams) => {
   const authors = alias(users, 'author');
