@@ -1,4 +1,5 @@
 FROM node:22.3 as base
+RUN addgroup nodeusr && adduser -S -G nodeusr nodeusr
 
 WORKDIR /home/backend
 
@@ -20,5 +21,7 @@ COPY --from=install /temp/dev/node_modules node_modules
 COPY . .
 
 RUN npm run generate:types
+
+USER nodeusr  
 
 ENTRYPOINT ["npm", "run", "dev"]
