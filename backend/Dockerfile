@@ -1,6 +1,5 @@
 FROM node:22.3 as base
-RUN addgroup nodeusr && adduser -S -G nodeusr nodeusr
-
+RUN addgroup nodeusr && adduser --system --group nodeusr
 WORKDIR /home/backend
 
 FROM base as install

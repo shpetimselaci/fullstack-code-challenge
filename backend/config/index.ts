@@ -9,6 +9,8 @@ const config = {
     database: environmentVariables.POSTGRES_DB,
   },
   version: environmentVariables.API_VERSION,
+  secret: environmentVariables.SECRET,
+  refreshSecret: environmentVariables.REFRESH_SECRET,
 };
 
 export default config;
