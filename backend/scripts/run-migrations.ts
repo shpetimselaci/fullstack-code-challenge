@@ -15,7 +15,7 @@ const runMigrations = async () => {
   try {
     await client.connect();
     const db = drizzle(client, { schema });
-    await migrate(db, { migrationsFolder: './drizzle' });
+    await migrate(db, { migrationsFolder: './migrations' });
 
     await client.end();
   } catch (error) {
