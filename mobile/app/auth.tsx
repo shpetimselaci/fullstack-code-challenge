@@ -5,13 +5,19 @@ import ParallaxScrollView from "@/common/ParallaxScrollView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
 import { ThemedButton } from "@/common/ThemedButton";
-import userAuth from "@/hooks/useAuth";
+import useAuth from "@/hooks/useAuth";
+import { Redirect } from "expo-router";
+import { observer } from "mobx-react-lite";
 
-export default function UserScreen() {
-  const { authenticate } = userAuth();
+function LoginScreen() {
+  const { authenticate, isAuthenticated } = useAuth();
   const handleAuthentication = async () => {
     await authenticate(Math.round(Math.random() * 20));
   };
+
+  if (isAuthenticated) {
+    return <Redirect href="/(tabs)" />;
+  }
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -35,6 +41,8 @@ export default function UserScreen() {
     </ParallaxScrollView>
   );
 }
+
+export default observer(LoginScreen);
 
 const styles = StyleSheet.create({
   titleContainer: {

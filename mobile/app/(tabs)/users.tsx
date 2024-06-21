@@ -1,34 +1,40 @@
 import { Image, StyleSheet } from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
-import ParallaxScrollView from "@/common/ParallaxScrollView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
+import { FlatList } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useThemeColor } from "@/hooks/useThemeColor";
+
+const User = () => {
+  return <ThemedView></ThemedView>;
+};
 
 export default function UsersScreen() {
+  const backgroundColor = useThemeColor({}, "background");
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/partial-react-logo.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">List of users to go to</ThemedText>
-        <HelloWave />
-      </ThemedView>
-    </ParallaxScrollView>
+    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+      <FlatList
+        ListHeaderComponent={
+          <ThemedView style={styles.titleContainer}>
+            <ThemedText type="title">List of users to go to</ThemedText>
+            <HelloWave />
+          </ThemedView>
+        }
+        data={[]}
+        renderItem={User}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: { flexGrow: 1, padding: 24 },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
   },
   stepContainer: {
     gap: 8,

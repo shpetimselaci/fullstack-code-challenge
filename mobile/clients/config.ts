@@ -1,6 +1,6 @@
 const config = {
-  URL: process.env.API_ENDPOINT,
-  GRAPHQL_URL: process.env.GRAPHQL_URL,
+  URL: "http://192.168.0.104:4000",
+  GRAPHQL_URL: "http://localhost:4000/graphql",
 };
 
 export default config;

@@ -1,20 +1,12 @@
-import { Redirect, Tabs } from "expo-router";
-import React, { useContext } from "react";
+import { Tabs } from "expo-router";
+import React from "react";
 
 import { TabBarIcon } from "@/common/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
-import { GlobalContext } from "@/store/context/global";
-import { observer } from "mobx-react-lite";
 
 function TabLayout() {
   const colorScheme = useColorScheme();
-
-  const { auth } = useContext(GlobalContext);
-
-  if (!auth.isLoggedIn) {
-    return <Redirect href="auth" />;
-  }
 
   return (
     <Tabs
@@ -22,6 +14,7 @@ function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
       }}
+      initialRouteName="index"
     >
       <Tabs.Screen
         name="index"
@@ -44,8 +37,20 @@ function TabLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, focused }) => (
+            <TabBarIcon
+              name={focused ? "settings" : "settings-outline"}
+              color={color}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }
 
-export default observer(TabLayout);
+export default TabLayout;

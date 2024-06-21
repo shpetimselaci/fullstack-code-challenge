@@ -1,16 +1,21 @@
-import authClient from "@/clients/auth";
-import auth from "@/store/mobx/auth";
-import { router } from "expo-router";
+import { GlobalContext } from "@/store/context/global";
+import { useRouter } from "expo-router";
+import { useContext } from "react";
 
-export default function userAuth() {
+export default function useAuth() {
+  const router = useRouter();
+  const { auth } = useContext(GlobalContext);
   async function authenticate(userId: number) {
-    const user = await authClient.login(userId);
-
-    auth.authenticateWith(user);
-
-    router.navigate("tabs");
+    await auth.authenticateWith(userId);
+    router.navigate("/(tabs)");
+  }
+  async function logout() {
+    auth.logout();
+    router.replace("/auth");
   }
   return {
+    isAuthenticated: auth.isLoggedIn,
     authenticate,
+    logout,
   };
 }

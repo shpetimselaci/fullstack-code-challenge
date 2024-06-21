@@ -15,6 +15,7 @@ import client from "@/clients/apollo";
 import { GlobalContext } from "@/store/context/global";
 import auth from "@/store/mobx/auth";
 import useLoadStores from "@/hooks/useLoadStores";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -37,30 +38,36 @@ function RootLayout() {
   }
 
   return (
-    <ApolloProvider client={client}>
-      <GlobalContext.Provider value={{ auth }}>
-        <ThemeProvider
-          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
-        >
-          <Stack initialRouteName="auth">
-            <Stack.Screen
-              name="auth"
-              options={{ headerShown: false, presentation: "modal" }}
-            />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="question"
-              options={{ headerShown: false, presentation: "modal" }}
-            />
-            <Stack.Screen
-              name="user"
-              options={{ headerShown: false, presentation: "modal" }}
-            />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </ThemeProvider>
-      </GlobalContext.Provider>
-    </ApolloProvider>
+    <GestureHandlerRootView>
+      <ApolloProvider client={client}>
+        <GlobalContext.Provider value={{ auth }}>
+          <ThemeProvider
+            value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+          >
+            <Stack initialRouteName="auth">
+              <Stack.Screen
+                name="question"
+                options={{ headerShown: false, presentation: "modal" }}
+              />
+              <Stack.Screen
+                name="user"
+                options={{ headerShown: false, presentation: "modal" }}
+              />
+
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="auth"
+                options={{ headerShown: false, presentation: "modal" }}
+              />
+              <Stack.Screen
+                name="+not-found"
+                options={{ headerShown: false }}
+              />
+            </Stack>
+          </ThemeProvider>
+        </GlobalContext.Provider>
+      </ApolloProvider>
+    </GestureHandlerRootView>
   );
 }
 

@@ -22,6 +22,7 @@ const login = async (userId: number) => {
       };
     }>;
   } catch (error) {
+    console.log(`${config.URL}/auth/login`, error);
     throw new Error("Could not authenticate user!");
   }
 };

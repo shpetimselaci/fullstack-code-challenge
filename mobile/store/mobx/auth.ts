@@ -1,13 +1,20 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import {
+  action,
+  computed,
+  makeAutoObservable,
+  observable,
+  runInAction,
+} from "mobx";
 import {
   hydrateStore,
   isHydrated,
   isPersisting,
   makePersistable,
 } from "mobx-persist-store";
-import storage from "expo-secure-store";
+import * as storage from "expo-secure-store";
+import authClient from "@/clients/auth";
 
-const safeStringifying = (value: string | object) => {
+const safeStringifying = (value: string | object | undefined) => {
   try {
     if (typeof value === "object") {
       return JSON.stringify(value);
@@ -15,7 +22,7 @@ const safeStringifying = (value: string | object) => {
     return value;
   } catch (error) {
     console.warn("Could not stringify object. Reason:", error);
-    return null;
+    return "";
   }
 };
 
@@ -28,15 +35,15 @@ const safeParsing = (value: string) => {
 };
 
 class AuthStore {
-  isLoggedIn = false;
-
-  user: {
-    id: number;
-    fullName: string;
-    birthdate: string;
-    createdAt: string;
-    updatedAt: string;
-  } | null = null;
+  user:
+    | {
+        id: number;
+        fullName: string;
+        birthdate: string;
+        createdAt: string;
+        updatedAt: string;
+      }
+    | undefined = undefined;
 
   token: string = "";
   refreshToken: string = "";
@@ -45,7 +52,13 @@ class AuthStore {
     makeAutoObservable(this);
     makePersistable(this, {
       name: "authStore",
-      properties: ["token", "refreshToken", "user"],
+      properties: [
+        "token",
+        "refreshToken",
+        { key: "user", serialize: safeStringifying, deserialize: safeParsing },
+      ],
+
+      debugMode: true,
       storage: {
         async getItem(key) {
           let item = await storage.getItemAsync(key);
@@ -71,7 +84,11 @@ class AuthStore {
   }
 
   async hydrateStore() {
-    await hydrateStore(this);
+    try {
+      await hydrateStore(this);
+    } catch (error) {
+      console.warn(error);
+    }
   }
 
   get isHydrated() {
@@ -82,19 +99,25 @@ class AuthStore {
     return isPersisting(this);
   }
 
-  authenticateWith({
-    refreshToken,
-    token,
-    user,
-  }: {
-    refreshToken: string;
-    token: string;
-    user: AuthStore["user"];
-  }) {
+  get isLoggedIn() {
+    return this.token != "";
+  }
+
+  authenticateWith(userId: number) {
+    authClient.login(userId).then(({ token, refreshToken, user }) => {
+      runInAction(() => {
+        this.token = token;
+        this.refreshToken = refreshToken;
+        this.user = user;
+      });
+    });
+  }
+
+  logout() {
     runInAction(() => {
-      this.token = token;
-      this.refreshToken = refreshToken;
-      this.user = user;
+      this.token = "";
+      this.refreshToken = "";
+      this.user = undefined;
     });
   }
 }

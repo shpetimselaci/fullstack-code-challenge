@@ -1,22 +1,21 @@
 import auth from "@/store/mobx/auth";
-import { observe } from "mobx";
+import { reaction } from "mobx";
 import { useEffect, useState } from "react";
 
 export default function useLoadStores() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    if (!auth.isPersisting && !auth.isHydrated) {
-      auth.hydrateStore();
-      let disposable = observe(auth, () => {
-        setLoaded(true);
-      });
+    let cleanup = reaction(
+      () => auth.isHydrated,
+      (isHydrated) => {
+        setLoaded(isHydrated);
+      },
+      { fireImmediately: true }
+    );
 
-      return () => {
-        disposable();
-      };
-    }
-  }, [loaded]);
+    return cleanup();
+  }, []);
 
   return loaded;
 }
