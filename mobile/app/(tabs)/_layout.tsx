@@ -1,37 +1,51 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
+import { Redirect, Tabs } from "expo-router";
+import React, { useContext } from "react";
 
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { TabBarIcon } from "@/common/navigation/TabBarIcon";
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { GlobalContext } from "@/store/context/global";
+import { observer } from "mobx-react-lite";
 
-export default function TabLayout() {
+function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const { auth } = useContext(GlobalContext);
+
+  if (!auth.isLoggedIn) {
+    return <Redirect href="auth" />;
+  }
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-      }}>
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: "Explore",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon
+              name={focused ? "home" : "home-outline"}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="users"
         options={{
-          title: 'Explore',
+          title: "Users",
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? "man" : "man-outline"} color={color} />
           ),
         }}
       />
     </Tabs>
   );
 }
+
+export default observer(TabLayout);

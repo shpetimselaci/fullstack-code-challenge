@@ -15,9 +15,9 @@ authRouter.post(
   }),
   async (req, res) => {
     try {
-      const tokenAndRefreshToken = await authService.loginUser(req.body);
+      const tokensAndUser = await authService.loginUser(req.body);
 
-      return res.status(200).json(tokenAndRefreshToken);
+      return res.status(200).json(tokensAndUser);
     } catch (error) {
       let message = 'Unknown Error';
       if (error instanceof Error) message = error.message;

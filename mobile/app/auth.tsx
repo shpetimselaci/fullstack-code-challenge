@@ -4,8 +4,14 @@ import { HelloWave } from "@/common/HelloWave";
 import ParallaxScrollView from "@/common/ParallaxScrollView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
+import { ThemedButton } from "@/common/ThemedButton";
+import userAuth from "@/hooks/useAuth";
 
-export default function HomeScreen() {
+export default function UserScreen() {
+  const { authenticate } = userAuth();
+  const handleAuthentication = async () => {
+    await authenticate(Math.round(Math.random() * 20));
+  };
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -17,8 +23,14 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">Authenticate here</ThemedText>
         <HelloWave />
+      </ThemedView>
+
+      <ThemedView>
+        <ThemedButton type="default" onPress={handleAuthentication}>
+          Authenticate me
+        </ThemedButton>
       </ThemedView>
     </ParallaxScrollView>
   );

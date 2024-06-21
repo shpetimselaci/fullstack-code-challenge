@@ -5,7 +5,7 @@ import ParallaxScrollView from "@/common/ParallaxScrollView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
 
-export default function HomeScreen() {
+export default function UserScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
@@ -17,7 +17,7 @@ export default function HomeScreen() {
       }
     >
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
+        <ThemedText type="title">User profile with tabs</ThemedText>
         <HelloWave />
       </ThemedView>
     </ParallaxScrollView>

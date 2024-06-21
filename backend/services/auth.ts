@@ -13,7 +13,7 @@ export const loginUser = async ({ userId }: { userId: number }) => {
 
   const token = signJWT(user);
   const refreshToken = signRefreshJWT(user);
-  return { token, refreshToken };
+  return { token, refreshToken, user };
 };
 
 export const refreshToken = async ({ refreshToken }: { refreshToken: string }) => {
