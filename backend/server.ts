@@ -13,6 +13,7 @@ import { httpLogger, runtimeLogger } from './utils/loggers';
 import rateLimitMiddleware from './middleware/ratelimiter';
 import authRouter from './routes/auth';
 import { authMiddleware } from './middleware/auth';
+import config from './config';
 
 const startServer = async () => {
   const app = express();
@@ -41,6 +42,9 @@ const startServer = async () => {
     }),
   );
 
+  if (config.nodeEnvironment === 'development') {
+    app.use('/gen/graphql', expressMiddleware(server)); // just for codegen on client of frontend
+  }
   app.use('/auth', authRouter);
 
   app.get('/health', (_, res) => {

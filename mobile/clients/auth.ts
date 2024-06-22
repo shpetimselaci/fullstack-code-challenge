@@ -2,7 +2,7 @@ import config from "./config";
 
 const login = async (userId: number) => {
   try {
-    const authenticated = await fetch(`${config.URL}/auth/login`, {
+    const authenticated = await fetch(`${config.API_URL}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ const login = async (userId: number) => {
       };
     }>;
   } catch (error) {
-    console.log(`${config.URL}/auth/login`, error);
+    console.log(`${config.API_URL}/auth/login`, error);
     throw new Error("Could not authenticate user!");
   }
 };

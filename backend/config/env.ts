@@ -9,6 +9,7 @@ const envSchema = z.object({
   API_VERSION: z.coerce.number(),
   SECRET: z.string(),
   REFRESH_SECRET: z.string(),
+  NODE_ENV: z.enum(['development', 'production']),
 });
 
 const environmentVariables = envSchema.parse(process.env);
