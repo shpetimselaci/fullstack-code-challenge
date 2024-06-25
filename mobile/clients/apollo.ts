@@ -3,6 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 import auth from "../store/mobx/auth";
 import config from "./config";
 import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+import { offsetLimitPagination } from "@apollo/client/utilities";
 
 if (__DEV__) {
   // Adds messages only in a dev environment
@@ -31,7 +32,11 @@ const authLink = setContext(async (_, { headers }) => {
 });
 
 const client = new ApolloClient({
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    typePolicies: {
+      questions: offsetLimitPagination(),
+    },
+  }),
   link: authLink.concat(httpLink),
 });
 

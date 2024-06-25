@@ -1,23 +1,35 @@
-import { Image, ListRenderItem, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ListRenderItem,
+  StyleSheet,
+} from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS } from "@/store/graphql/queries";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
+import { QuestionsQuery } from "@/gql/__generated__/graphql";
+import { Link } from "expo-router";
 
-const Question: ListRenderItem<any> = ({ item }) => {
+const Question: ListRenderItem<QuestionsQuery["questions"][0]> = ({ item }) => {
   return (
-    <ThemedView>
-      <ThemedText type="title">{item.fullName}</ThemedText>
+    <ThemedView style={{ paddingHorizontal: 10, paddingVertical: 4 }}>
+      <Link href={`/question/${item.id}`}>
+        <ThemedText type="link">{item.title}</ThemedText>
+      </Link>
+      <ThemedText type="description">{item.description}</ThemedText>
     </ThemedView>
   );
 };
 
 export default function HomeScreen() {
-  const { loading, error, data, refetch } = useQuery(GET_QUESTIONS);
+  const { loading, error, data, refetch, fetchMore } = useQuery(GET_QUESTIONS, {
+    variables: { offset: 0, limit: 10 },
+  });
 
   return (
     <ThemedSafeAreaView>
@@ -27,18 +39,26 @@ export default function HomeScreen() {
       />
       <FlatList
         data={data?.questions}
-        refreshing={loading}
         renderItem={Question}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => refetch({ limit: 10, offset: 0 })}
+          />
+        }
+        ListFooterComponent={
+          <ActivityIndicator animating={loading} hidesWhenStopped />
+        }
+        ListHeaderComponent={
+          <ThemedView style={styles.titleContainer}>
+            <ThemedText type="title">Questions from people!!</ThemedText>
+            <HelloWave />
+          </ThemedView>
+        }
+        onEndReached={() =>
+          fetchMore({ variables: { offset: data?.questions?.length } })
+        }
       />
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          onPress={() => refetch({ limit: 10, offset: 0 })}
-        >
-          Questions from people!!
-        </ThemedText>
-        <HelloWave />
-      </ThemedView>
     </ThemedSafeAreaView>
   );
 }
