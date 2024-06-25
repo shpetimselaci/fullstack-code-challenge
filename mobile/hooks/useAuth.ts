@@ -17,5 +17,6 @@ export default function useAuth() {
     isAuthenticated: auth.isLoggedIn,
     authenticate,
     logout,
+    error: auth.error,
   };
 }

@@ -2,6 +2,13 @@ import { ApolloClient, InMemoryCache, createHttpLink } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import auth from "../store/mobx/auth";
 import config from "./config";
+import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
+
+if (__DEV__) {
+  // Adds messages only in a dev environment
+  loadDevMessages();
+  loadErrorMessages();
+}
 
 const httpLink = createHttpLink({
   uri: config.GRAPHQL_URL,
@@ -10,6 +17,7 @@ const httpLink = createHttpLink({
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
   const token = auth.token;
+
   if (token == null) {
     return { headers };
   }
@@ -17,7 +25,7 @@ const authLink = setContext(async (_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      Authorization: token ? `Bearer ${token}` : "",
     },
   };
 });

@@ -10,7 +10,7 @@ import { Redirect } from "expo-router";
 import { observer } from "mobx-react-lite";
 
 function LoginScreen() {
-  const { authenticate, isAuthenticated } = useAuth();
+  const { authenticate, isAuthenticated, error } = useAuth();
   const handleAuthentication = async () => {
     await authenticate(Math.round(Math.random() * 20));
   };
@@ -32,6 +32,12 @@ function LoginScreen() {
         <ThemedText type="title">Authenticate here</ThemedText>
         <HelloWave />
       </ThemedView>
+
+      {error && error.message ? (
+        <ThemedView>
+          <ThemedText>{error?.message || "Something went wrong"}</ThemedText>
+        </ThemedView>
+      ) : null}
 
       <ThemedView>
         <ThemedButton type="default" onPress={handleAuthentication}>

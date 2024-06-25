@@ -1,7 +1,7 @@
-import { gql } from "@apollo/client";
+import { gql } from "@/gql/__generated__";
 
-export const ADD_ANSWER = gql`
-  mutation Mutation($questionId: Int!, $answer: String!) {
+export const ADD_ANSWER = gql(`
+  mutation AddAnswer($questionId: Int!, $answer: String!) {
     addAnswer(questionId: $questionId, answer: $answer) {
       id
       answer
@@ -23,10 +23,10 @@ export const ADD_ANSWER = gql`
       updatedAt
     }
   }
-`;
+`);
 
-export const EDIT_ANSWER = gql`
-  mutation Mutation($answerId: Int!, $answer: String!) {
+export const EDIT_ANSWER = gql(`
+  mutation EditAnswer($answerId: Int!, $answer: String!) {
     editAnswer(answerId: $answerId, answer: $answer) {
       id
       answer
@@ -47,10 +47,10 @@ export const EDIT_ANSWER = gql`
       createdAt
       updatedAt
     }
-`;
+`);
 
-export const DELETE_ANSWER = gql`
-  mutation Mutation($answerId: Int!) {
+export const DELETE_ANSWER = gql(`
+  mutation DeleteAnswer($answerId: Int!) {
    deleteAnswer(answerId: $answerId) {
       id
       answer
@@ -71,9 +71,9 @@ export const DELETE_ANSWER = gql`
       createdAt
       updatedAt
     }
-`;
+`);
 
-export const ADD_QUESTION = gql`
+export const ADD_QUESTION = gql(`
   mutation AddQuestion($title: String!, $description: String!) {
     addQuestion(title: $title, description: $description) {
       id
@@ -90,9 +90,9 @@ export const ADD_QUESTION = gql`
       updatedAt
     }
   }
-`;
+`);
 
-export const EDIT_QUESTION = gql`
+export const EDIT_QUESTION = gql(`
   mutation EditQuestion(
     $questionId: Int!
     $title: String!
@@ -106,27 +106,34 @@ export const EDIT_QUESTION = gql`
       id
       title
       description
-      createdAt
-      updatedAt
-    }
-    deleteQuestion(questionId: $questionId) {
-      id
-      title
-      description
+      author {
+        id
+        name
+        birthday
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
   }
-`;
+`);
 
-export const DELETE_QUESTION = gql`
+export const DELETE_QUESTION = gql(`
   mutation DeleteQuestion($questionId: Int!) {
     deleteQuestion(questionId: $questionId) {
       id
       title
       description
+      author {
+        id
+        name
+        birthday
+        createdAt
+        updatedAt
+      }
       createdAt
       updatedAt
     }
   }
-`;
+`);

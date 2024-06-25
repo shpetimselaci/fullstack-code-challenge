@@ -5,6 +5,8 @@ import {
   observable,
   runInAction,
 } from "mobx";
+
+import { fromPromise } from "mobx-utils";
 import {
   hydrateStore,
   isHydrated,
@@ -47,6 +49,8 @@ class AuthStore {
 
   token: string = "";
   refreshToken: string = "";
+
+  error: any = null;
 
   constructor() {
     makeAutoObservable(this);
@@ -103,14 +107,16 @@ class AuthStore {
     return this.token != "";
   }
 
-  authenticateWith(userId: number) {
-    authClient.login(userId).then(({ token, refreshToken, user }) => {
-      runInAction(() => {
-        this.token = token;
-        this.refreshToken = refreshToken;
-        this.user = user;
-      });
-    });
+  async authenticateWith(userId: number) {
+    try {
+      const { token, refreshToken, user } = await authClient.login(userId);
+      this.token = token;
+      this.refreshToken = refreshToken;
+      this.user = user;
+    } catch (error) {
+      this.error = error;
+      throw error;
+    }
   }
 
   logout() {

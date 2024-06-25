@@ -9,3 +9,8 @@ export const httpLogger = pino({
   timestamp: pino.stdTimeFunctions.isoTime,
   name: 'http-logger',
 });
+
+export const gqlLogger = pino({
+  name: 'gql-logger',
+  depthLimit: 1000,
+});

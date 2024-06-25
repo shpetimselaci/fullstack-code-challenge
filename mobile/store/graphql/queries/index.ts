@@ -1,6 +1,6 @@
-import { gql } from "@apollo/client";
+import { gql } from "@/gql/__generated__";
 
-export const GET_QUESTIONS = gql`
+export const GET_QUESTIONS = gql(`
   query Questions($limit: Int, $offset: Int) {
     questions(limit: $limit, offset: $offset) {
       id
@@ -15,9 +15,9 @@ export const GET_QUESTIONS = gql`
       updatedAt
     }
   }
-`;
+`);
 
-export const GET_USER_QUESTIONS = gql`
+export const GET_USER_QUESTIONS = gql(`
   query UserQuestions($userId: Int!, $limit: Int, $offset: Int) {
     userQuestions(userId: $userId, limit: $limit, offset: $offset) {
       id
@@ -34,9 +34,9 @@ export const GET_USER_QUESTIONS = gql`
       updatedAt
     }
   }
-`;
+`);
 
-export const GET_USER_ANSWERS = gql`
+export const GET_USER_ANSWERS = gql(`
   query UserAnswers($userId: Int!) {
     userAnswers(userId: $userId) {
       id
@@ -59,9 +59,9 @@ export const GET_USER_ANSWERS = gql`
       createdAt
     }
   }
-`;
+`);
 
-export const GET_QUESTION_ANSWERS = gql`
+export const GET_QUESTION_ANSWERS = gql(`
   query QuestionAnswers($questionAnswersId: Int!, $offset: Int, $limit: Int) {
     questionAnswers(id: $questionAnswersId, offset: $offset, limit: $limit) {
       id
@@ -84,9 +84,9 @@ export const GET_QUESTION_ANSWERS = gql`
       }
     }
   }
-`;
+`);
 
-export const GET_USERS = gql`
+export const GET_USERS = gql(`
   query Users($limit: Int, $offset: Int) {
     users(limit: $limit, offset: $offset) {
       id
@@ -96,4 +96,4 @@ export const GET_USERS = gql`
       updatedAt
     }
   }
-`;
+`);

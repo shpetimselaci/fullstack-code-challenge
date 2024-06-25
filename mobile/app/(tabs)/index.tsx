@@ -1,17 +1,12 @@
-import {
-  Image,
-  ListRenderItem,
-  StyleSheet,
-  useWindowDimensions,
-} from "react-native";
+import { Image, ListRenderItem, StyleSheet } from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
-import ParallaxScrollView from "@/common/ParallaxScrollView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
 import { useQuery } from "@apollo/client";
 import { GET_QUESTIONS } from "@/store/graphql/queries";
 import { FlatList } from "react-native-gesture-handler";
+import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 
 const Question: ListRenderItem<any> = ({ item }) => {
   return (
@@ -22,25 +17,29 @@ const Question: ListRenderItem<any> = ({ item }) => {
 };
 
 export default function HomeScreen() {
-  const dimensions = useWindowDimensions();
+  const { loading, error, data, refetch } = useQuery(GET_QUESTIONS);
 
-  const { loading, error, data } = useQuery(GET_QUESTIONS);
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/otter.png")}
-          style={[styles.otter, { width: dimensions.width }]}
-        />
-      }
-    >
-      <FlatList data={data} renderItem={Question} />
+    <ThemedSafeAreaView>
+      <Image
+        source={require("@/assets/images/otter.png")}
+        style={[styles.otter]}
+      />
+      <FlatList
+        data={data?.questions}
+        refreshing={loading}
+        renderItem={Question}
+      />
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Questions from people!</ThemedText>
+        <ThemedText
+          type="title"
+          onPress={() => refetch({ limit: 10, offset: 0 })}
+        >
+          Questions from people!!
+        </ThemedText>
         <HelloWave />
       </ThemedView>
-    </ParallaxScrollView>
+    </ThemedSafeAreaView>
   );
 }
 
@@ -49,13 +48,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 2,
+    padding: 24,
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
   otter: {
-    flex: 1,
+    width: "100%",
+    height: 200,
     objectFit: "cover",
     position: "absolute",
   },

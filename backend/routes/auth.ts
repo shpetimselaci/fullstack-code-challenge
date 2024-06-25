@@ -3,6 +3,7 @@ import { validateRequest } from 'zod-express-middleware';
 import z from 'zod';
 import * as authService from '../services/auth';
 import { authErrors } from '../common/errors';
+import { httpLogger } from '../utils/loggers';
 
 const authRouter = Router();
 
@@ -28,6 +29,7 @@ authRouter.post(
           break;
         }
         default: {
+          httpLogger.error(error);
           res.status(500);
         }
       }

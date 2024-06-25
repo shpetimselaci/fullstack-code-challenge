@@ -5,9 +5,6 @@ import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
 
 export default function NotFoundScreen() {
-  const s = useSegments();
-  console.warn(s);
-
   return (
     <>
       <Stack.Screen options={{ title: "Oops!" }} />
