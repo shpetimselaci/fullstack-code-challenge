@@ -49,15 +49,25 @@ function RootLayout() {
                 name="question"
                 options={{ headerShown: false, presentation: "modal" }}
               />
-              <Stack.Screen
-                name="user"
-                options={{ headerShown: false, presentation: "modal" }}
-              />
 
               <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
               <Stack.Screen
                 name="auth"
                 options={{ headerShown: false, presentation: "modal" }}
+              />
+              <Stack.Screen
+                name="user/[user]"
+                options={{
+                  presentation: "card",
+                  headerShown: false,
+                }}
+              />
+              <Stack.Screen
+                name="question/[question]"
+                options={{
+                  presentation: "card",
+                  headerShown: false,
+                }}
               />
               <Stack.Screen
                 name="+not-found"

@@ -9,12 +9,14 @@ import {
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { ThemedText } from "./ThemedText";
 import { Colors } from "@/constants/Colors";
+import { ReactElement, ReactNode } from "react";
 
 export type ThemedButton = TouchableOpacityProps & {
   lightColor?: string;
   darkColor?: string;
   loading?: boolean;
   type?: "default" | "lg" | "xl" | "small";
+  icon?: ReactNode;
   textType?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
 };
 
@@ -23,6 +25,7 @@ export function ThemedButton({
   lightColor,
   darkColor,
   type = "default",
+  icon,
   textType,
   children,
   loading,
@@ -43,6 +46,8 @@ export function ThemedButton({
     >
       {loading ? (
         <ActivityIndicator />
+      ) : icon ? (
+        icon
       ) : (
         <ThemedText
           lightColor={Colors.dark.text}

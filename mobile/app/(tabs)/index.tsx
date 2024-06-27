@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  Image,
-  ListRenderItem,
-  StyleSheet,
-} from "react-native";
+import { ActivityIndicator, Image, StyleSheet } from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
 import { ThemedText } from "@/common/ThemedText";
@@ -13,23 +8,20 @@ import { GET_QUESTIONS } from "@/store/graphql/queries";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import { QuestionsQuery } from "@/gql/__generated__/graphql";
-import { Link } from "expo-router";
-
-const Question: ListRenderItem<QuestionsQuery["questions"][0]> = ({ item }) => {
-  return (
-    <ThemedView style={{ paddingHorizontal: 10, paddingVertical: 4 }}>
-      <Link href={`/question/${item.id}`}>
-        <ThemedText type="link">{item.title}</ThemedText>
-      </Link>
-      <ThemedText type="description">{item.description}</ThemedText>
-    </ThemedView>
-  );
-};
+import { useNavigation } from "expo-router";
+import { Question } from "@/common/Question";
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const { loading, error, data, refetch, fetchMore } = useQuery(GET_QUESTIONS, {
     variables: { offset: 0, limit: 10 },
   });
+  const handleAvatarPress = (item: QuestionsQuery["questions"][0]) => {
+    navigation.navigate(`user/[user]`, item.author);
+  };
+  const handleQuestionPress = (item: QuestionsQuery["questions"][0]) => {
+    navigation.navigate(`question/[question]`, item);
+  };
 
   return (
     <ThemedSafeAreaView>
@@ -39,7 +31,15 @@ export default function HomeScreen() {
       />
       <FlatList
         data={data?.questions}
-        renderItem={Question}
+        renderItem={({ item }) => (
+          <Question
+            authorName={item.author.name}
+            onPress={() => handleQuestionPress(item)}
+            onAvatarPress={() => handleAvatarPress(item)}
+            title={item.title}
+            description={item.description}
+          />
+        )}
         refreshControl={
           <RefreshControl
             refreshing={loading}

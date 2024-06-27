@@ -11,7 +11,8 @@ export type ThemedTextProps = TextProps & {
     | "description"
     | "defaultSemiBold"
     | "subtitle"
-    | "link";
+    | "link"
+    | "author";
 };
 
 export function ThemedText({
@@ -53,5 +54,10 @@ const styles = StyleSheet.create({
     lineHeight: 30,
     fontSize: 16,
     color: "#0a7ea4",
+  },
+  author: {
+    fontSize: 12,
+    lineHeight: 20,
+    fontWeight: "800",
   },
 });

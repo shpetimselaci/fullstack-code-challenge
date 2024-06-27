@@ -1,50 +1,88 @@
-import { Image, StyleSheet } from "react-native";
+import {
+  ActivityIndicator,
+  Image,
+  ListRenderItem,
+  StyleSheet,
+} from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedView } from "@/common/ThemedView";
-import { FlatList } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { useQuery } from "@apollo/client";
+import { GET_USERS } from "@/store/graphql/queries";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
+import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
+import { UsersQuery } from "@/gql/__generated__/graphql";
+import { Link } from "expo-router";
 
-const User = () => {
-  return <ThemedView></ThemedView>;
+const User: ListRenderItem<UsersQuery["users"][0]> = ({ item }) => {
+  return (
+    <ThemedView style={{ paddingVertical: 4 }}>
+      <Link
+        href={{
+          pathname: "/user/[user]",
+          params: item,
+        }}
+      >
+        <ThemedText type="link">{item.name}</ThemedText>
+      </Link>
+    </ThemedView>
+  );
 };
 
 export default function UsersScreen() {
-  const backgroundColor = useThemeColor({}, "background");
+  const { loading, error, data, refetch, fetchMore } = useQuery(GET_USERS, {
+    variables: { offset: 0, limit: 10 },
+  });
 
   return (
-    <SafeAreaView style={[styles.container, { backgroundColor }]}>
+    <ThemedSafeAreaView style={styles.container}>
       <FlatList
-        ListHeaderComponent={
+        data={data?.users}
+        renderItem={User}
+        refreshControl={
+          <RefreshControl
+            refreshing={loading}
+            onRefresh={() => refetch({ limit: 10, offset: 0 })}
+          />
+        }
+        ListFooterComponent={
+          <ActivityIndicator animating={loading} hidesWhenStopped />
+        }
+        ListHeaderComponent={() => (
           <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title">List of users to go to</ThemedText>
+            <ThemedText type="subtitle">
+              List of users to reach out to.
+            </ThemedText>
             <HelloWave />
           </ThemedView>
+        )}
+        stickyHeaderIndices={[0]}
+        onEndReached={() =>
+          fetchMore({ variables: { offset: data?.users?.length } })
         }
-        data={[]}
-        renderItem={User}
       />
-    </SafeAreaView>
+    </ThemedSafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, padding: 24 },
+  container: { flexGrow: 1, paddingHorizontal: 10 },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
+    gap: 2,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
   },
   stepContainer: {
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  otter: {
+    width: "100%",
+    height: 200,
+    objectFit: "cover",
     position: "absolute",
   },
 });

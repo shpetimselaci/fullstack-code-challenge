@@ -10,6 +10,8 @@ export const GET_QUESTIONS = gql(`
         id
         name
         birthday
+        createdAt
+        updatedAt
       }
       createdAt
       updatedAt
@@ -37,8 +39,8 @@ export const GET_USER_QUESTIONS = gql(`
 `);
 
 export const GET_USER_ANSWERS = gql(`
-  query UserAnswers($userId: Int!) {
-    userAnswers(userId: $userId) {
+  query UserAnswers($userId: Int!, $limit: Int, $offset: Int) {
+    userAnswers(userId: $userId, limit: $limit, offset: $offset) {
       id
       answer
       question {
@@ -48,6 +50,8 @@ export const GET_USER_ANSWERS = gql(`
           birthday
           name
           id
+          createdAt
+          updatedAt
         }
         description
       }
