@@ -8,8 +8,9 @@ import { GET_QUESTIONS } from "@/store/graphql/queries";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import { QuestionsQuery } from "@/gql/__generated__/graphql";
-import { useNavigation } from "expo-router";
+import { useNavigation, Link } from "expo-router";
 import { Question } from "@/common/Question";
+import { ExpoRouter } from "@/.expo/types/router";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -17,10 +18,12 @@ export default function HomeScreen() {
     variables: { offset: 0, limit: 10 },
   });
   const handleAvatarPress = (item: QuestionsQuery["questions"][0]) => {
-    navigation.navigate(`user/[user]`, item.author);
+        // @ts-ignore-next-line
+    navigation.navigate({ name: 'user/[user]', params: item.author});
   };
   const handleQuestionPress = (item: QuestionsQuery["questions"][0]) => {
-    navigation.navigate(`question/[question]`, item);
+    // @ts-ignore-next-line
+    navigation.navigate({ name: "question/[question]", params: { question: item } });
   };
 
   return (
@@ -38,6 +41,7 @@ export default function HomeScreen() {
             onAvatarPress={() => handleAvatarPress(item)}
             title={item.title}
             description={item.description}
+            key={item.id}
           />
         )}
         refreshControl={

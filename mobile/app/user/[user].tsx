@@ -1,18 +1,13 @@
-import {
-  ActivityIndicator,
-  ListRenderItem,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Link, useLocalSearchParams, useNavigation } from "expo-router";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { useLocalSearchParams, useNavigation } from "expo-router";
 import { ThemedView } from "@/common/ThemedView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import {
   Answer as AnswerType,
-  User as UserType,
-  Question as QuestionType,
+  User,
+  UserAnswersQuery,
+  UserQuestionsQuery,
 } from "@/gql/__generated__/graphql";
 import { useQuery } from "@apollo/client";
 import { GET_USER_ANSWERS, GET_USER_QUESTIONS } from "@/store/graphql/queries";
@@ -31,11 +26,20 @@ function UserQuestionsTab({ userId }: { userId: number }) {
   });
   const navigation = useNavigation();
 
-  const handleAvatarPress = (item: UserType) => {
-    navigation.navigate(`/users/[user]`, item);
+  const handleAvatarPress = (item: UserQuestionsQuery["userQuestions"][0]) => {
+    // @ts-ignore-next-line // problems with expo router being typed automatically
+    navigation.navigate({name: `user/[user]`, params: item.author });
   };
-  const handleQuestionPress = (item: QuestionType) => {
-    navigation.navigate(`question/[question]`, item.question);
+  const handleQuestionPress = (
+    item: UserQuestionsQuery["userQuestions"][0]
+  ) => {
+    // @ts-ignore-next-line // problems with expo router being typed automatically
+    navigation.navigate({
+      name: `question/[question]`,
+      params: {
+        question: item,
+      },
+    });
   };
   if (loading) {
     return (
@@ -58,10 +62,11 @@ function UserQuestionsTab({ userId }: { userId: number }) {
       renderItem={({ item }) => (
         <Question
           authorName={item.author.name}
-          onPress={handleQuestionPress}
-          onAvatarPress={handleAvatarPress}
+          onPress={() => handleQuestionPress(item)}
+          onAvatarPress={() => handleAvatarPress(item)}
           title={item.title}
           description={item.description}
+          key={item.id}
         />
       )}
       style={styles.tab}
@@ -80,17 +85,22 @@ function UserAnswersTab({ userId }: { userId: number }) {
     variables: { userId, limit: 10, offset: 0 },
   });
 
-  const handleAvatarPress = (item: UserType) => {
-    navigation.navigate(`/users/${item.id}`, { params: item });
+  const handleAvatarPress = (item: UserAnswersQuery["userAnswers"][0]['author']) => {
+    console.warn(item);
+    // @ts-ignore-next-line
+    navigation.navigate({ name: `user/[user]`, params: item });
   };
-  const handleAnswerPress = (item: AnswerType) => {
-    navigation.navigate(`questions/${item.question.id}`, {
+  const handleAnswerPress = (item: UserAnswersQuery["userAnswers"][0]) => {
+    // @ts-ignore-next-line problems with expo having the typed router
+    navigation.navigate({
+      name: `question/[question]`,
       params: {
         answer: item,
         question: item.question,
       },
     });
   };
+  
 
   if (loading) {
     return (
@@ -113,12 +123,13 @@ function UserAnswersTab({ userId }: { userId: number }) {
       data={data?.userAnswers}
       renderItem={({ item }) => (
         <Answer
-          onPress={() => {}}
-          onAvatarPress={() => {}}
+          onPress={() => handleAnswerPress(item)}
+          onAvatarPress={() => handleAvatarPress(item.author)}
           answer={item.answer}
           question={item.question}
           authorName={item.author.name}
           replyTo
+          key={item.id}
         />
       )}
       ListEmptyComponent={
@@ -136,7 +147,11 @@ const DisplayOnlyOne: React.FC<React.PropsWithChildren<{ show: boolean }>> = ({
   show,
   children,
 }) => {
-  return <View style={{ display: show ? "flex" : "none" }}>{children}</View>;
+  return (
+    <View style={{ display: show ? "flex" : "none", flexGrow: 1 }}>
+      {children}
+    </View>
+  );
 };
 
 export default function UserScreen() {
@@ -184,11 +199,7 @@ export default function UserScreen() {
 }
 
 const styles = StyleSheet.create({
-  tab: {
-    flexGrow: 1,
-    width: "100%",
-    height: "100%",
-  },
+  tab: {},
   container: {
     flexGrow: 1,
     paddingHorizontal: 10,

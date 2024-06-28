@@ -54,11 +54,15 @@ export const GET_USER_ANSWERS = gql(`
           updatedAt
         }
         description
+        createdAt
+        updatedAt
       }
       author {
         id
         name
         birthday
+        createdAt
+        updatedAt
       }
       createdAt
     }
