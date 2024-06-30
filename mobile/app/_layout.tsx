@@ -16,6 +16,7 @@ import { GlobalContext } from "@/store/context/global";
 import auth from "@/store/mobx/auth";
 import useLoadStores from "@/hooks/useLoadStores";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import uiStore from "@/store/mobx/uiStore";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -40,7 +41,7 @@ const Layout = () => {
   return (
     <GestureHandlerRootView>
       <ApolloProvider client={client}>
-        <GlobalContext.Provider value={{ auth }}>
+        <GlobalContext.Provider value={{ auth, uiStore }}>
           <ThemeProvider
             value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
           >

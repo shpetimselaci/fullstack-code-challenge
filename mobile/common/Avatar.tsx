@@ -14,14 +14,14 @@ function getTwoLetters(name: string) {
 }
 
 export function Avatar({
-  name,
+  name = "",
   size = 16,
   fontSize,
   lightColor,
   darkColor,
   onPress,
 }: {
-  name: string;
+  name?: string;
   size?: number;
   fontSize?: number;
   lightColor?: string;

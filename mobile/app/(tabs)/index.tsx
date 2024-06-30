@@ -10,20 +10,26 @@ import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import { QuestionsQuery } from "@/gql/__generated__/graphql";
 import { useNavigation, Link } from "expo-router";
 import { Question } from "@/common/Question";
-import { ExpoRouter } from "@/.expo/types/router";
+import { useContext } from "react";
+import { GlobalContext } from "@/store/context/global";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { uiStore } = useContext(GlobalContext);
   const { loading, error, data, refetch, fetchMore } = useQuery(GET_QUESTIONS, {
     variables: { offset: 0, limit: 10 },
   });
   const handleAvatarPress = (item: QuestionsQuery["questions"][0]) => {
-        // @ts-ignore-next-line
-    navigation.navigate({ name: 'user/[user]', params: item.author});
+    // @ts-ignore-next-line
+    navigation.navigate({ name: "user/[user]", params: item.author });
   };
   const handleQuestionPress = (item: QuestionsQuery["questions"][0]) => {
+    uiStore.selectedQuestion = item;
     // @ts-ignore-next-line
-    navigation.navigate({ name: "question/[question]", params: { question: item } });
+    navigation.navigate({
+      name: "question/[question]",
+      params: item,
+    });
   };
 
   return (

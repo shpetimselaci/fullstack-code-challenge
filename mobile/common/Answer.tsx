@@ -7,10 +7,10 @@ import { Ionicons } from "@expo/vector-icons";
 
 export const Answer: React.FC<{
   onAvatarPress: () => void;
-  onPress: () => void;
+  onPress?: () => void;
   authorName: string;
   answer: string;
-  question: {
+  question?: {
     title: string;
     description: string;
     author: {
@@ -23,7 +23,7 @@ export const Answer: React.FC<{
   answer,
   onAvatarPress,
   onPress,
-  question: { author },
+  question,
   replyTo,
 }) => {
   return (
@@ -35,7 +35,7 @@ export const Answer: React.FC<{
             name="return-up-back-outline"
             style={styles.icon}
           />
-          <ThemedText type="author">{author.name}</ThemedText>
+          <ThemedText type="author">{question?.author.name}</ThemedText>
         </ThemedView>
       ) : null}
       <ThemedView style={styles.titleContainer}>

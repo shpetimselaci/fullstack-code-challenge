@@ -5,14 +5,15 @@ import { ThemedText } from "./ThemedText";
 import { StyleSheet } from "react-native";
 
 export const Question: React.FC<{
-  authorName: string;
+  authorName?: string;
   title: string;
   description: string;
-  onAvatarPress: () => void;
-  onPress: () => void;
-}> = ({ authorName, title, description, onAvatarPress, onPress }) => {
+  onAvatarPress?: () => void;
+  onPress?: () => void;
+  type?: 'default' | 'borderless'
+}> = ({ authorName, title, description, onAvatarPress, onPress, type = 'default' }) => {
   return (
-    <TouchableOpacity style={styles.opacity} onPress={onPress}>
+    <TouchableOpacity style={[styles.opacity, styles[type]]} onPress={onPress}>
       <ThemedView style={styles.titleContainer}>
         <Avatar size={32} name={authorName} onPress={onAvatarPress} />
         <ThemedText style={styles.title}>{authorName}</ThemedText>
@@ -25,12 +26,17 @@ export const Question: React.FC<{
 
 const styles = StyleSheet.create({
   opacity: {
-    borderWidth: 1,
     flexGrow: 1,
     borderRadius: 6,
     padding: 10,
     width: "100%",
     marginTop: 10,
+  },
+  default: {
+    borderWidth: 1,
+  },
+  borderless: {
+
   },
   titleContainer: { flexDirection: "row", flexGrow: 1, alignItems: "center" },
   title: { marginLeft: 4 },

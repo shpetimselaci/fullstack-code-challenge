@@ -78,6 +78,13 @@ export const GET_QUESTION_ANSWERS = gql(`
         id
         title
         description
+        author {
+          id
+          name
+          birthday
+          createdAt
+          updatedAt
+        }
         updatedAt
         createdAt
       }

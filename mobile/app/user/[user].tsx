@@ -4,7 +4,6 @@ import { ThemedView } from "@/common/ThemedView";
 import { ThemedText } from "@/common/ThemedText";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import {
-  Answer as AnswerType,
   User,
   UserAnswersQuery,
   UserQuestionsQuery,
@@ -15,12 +14,14 @@ import { HeaderBack } from "@/common/navigation/HeaderBack";
 import { formatDistanceToNow, format, fromUnixTime } from "date-fns";
 import { ThemedTabs } from "@/common/ThemedTabs";
 import { FlatList } from "react-native-gesture-handler";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Avatar } from "@/common/Avatar";
 import { Question } from "@/common/Question";
 import { Answer } from "@/common/Answer";
+import { GlobalContext } from "@/store/context/global";
 
 function UserQuestionsTab({ userId }: { userId: number }) {
+  const { uiStore } = useContext(GlobalContext);
   const { loading, data, error } = useQuery(GET_USER_QUESTIONS, {
     variables: { userId, limit: 10, offset: 0 },
   });
@@ -28,17 +29,16 @@ function UserQuestionsTab({ userId }: { userId: number }) {
 
   const handleAvatarPress = (item: UserQuestionsQuery["userQuestions"][0]) => {
     // @ts-ignore-next-line // problems with expo router being typed automatically
-    navigation.navigate({name: `user/[user]`, params: item.author });
+    navigation.navigate({ name: `user/[user]`, params: item.author });
   };
   const handleQuestionPress = (
     item: UserQuestionsQuery["userQuestions"][0]
   ) => {
+    uiStore.selectedQuestion = item;
     // @ts-ignore-next-line // problems with expo router being typed automatically
     navigation.navigate({
       name: `question/[question]`,
-      params: {
-        question: item,
-      },
+      params: item,
     });
   };
   if (loading) {
@@ -81,26 +81,26 @@ function UserQuestionsTab({ userId }: { userId: number }) {
 
 function UserAnswersTab({ userId }: { userId: number }) {
   const navigation = useNavigation();
+  const { uiStore } = useContext(GlobalContext);
   const { loading, data, error } = useQuery(GET_USER_ANSWERS, {
     variables: { userId, limit: 10, offset: 0 },
   });
 
-  const handleAvatarPress = (item: UserAnswersQuery["userAnswers"][0]['author']) => {
+  const handleAvatarPress = (
+    item: UserAnswersQuery["userAnswers"][0]["author"]
+  ) => {
     console.warn(item);
     // @ts-ignore-next-line
     navigation.navigate({ name: `user/[user]`, params: item });
   };
   const handleAnswerPress = (item: UserAnswersQuery["userAnswers"][0]) => {
+    uiStore.selectedQuestion = item.question;
     // @ts-ignore-next-line problems with expo having the typed router
     navigation.navigate({
       name: `question/[question]`,
-      params: {
-        answer: item,
-        question: item.question,
-      },
+      params: item.question,
     });
   };
-  
 
   if (loading) {
     return (
