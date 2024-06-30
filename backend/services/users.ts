@@ -1,4 +1,4 @@
-import { eq, getTableColumns } from 'drizzle-orm';
+import { desc, eq, getTableColumns } from 'drizzle-orm';
 import { DEFAULT_LIMIT } from '../constants';
 import db from '../db';
 import { answers } from '../db/schemas/answers';
@@ -47,6 +47,7 @@ export const listUserAnswers = async ({
     },
     offset: offset || 0,
     limit: limit || DEFAULT_LIMIT,
+    orderBy: [desc(answers.id)],
   });
 
   return userAnswers as NonNullableObject<typeof userAnswers>;
@@ -68,7 +69,7 @@ export const listUserQuestions = async ({
     .from(questions)
     .where(eq(questions.authorId, userId))
     .rightJoin(authors, eq(questions.authorId, authors.id))
-    .orderBy(questions.createdAt)
+    .orderBy(desc(questions.createdAt))
     .offset(offset || 0)
     .limit(limit || DEFAULT_LIMIT);
 
