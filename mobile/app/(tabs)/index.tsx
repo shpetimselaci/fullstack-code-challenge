@@ -12,6 +12,8 @@ import { useNavigation } from "expo-router";
 import { Question } from "@/common/Question";
 import { useContext } from "react";
 import { GlobalContext } from "@/store/context/global";
+import { ThemedButton } from "@/common/ThemedButton";
+import { Ionicons } from "@expo/vector-icons";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -29,6 +31,14 @@ export default function HomeScreen() {
     navigation.navigate({
       name: "question/[question]",
       params: item,
+    });
+  };
+
+  const handleAddQuestion = () => {
+    uiStore.selectedQuestion = null;
+    // @ts-ignore-next-line
+    navigation.navigate({
+      name: "question/new",
     });
   };
 
@@ -58,7 +68,15 @@ export default function HomeScreen() {
         }
         ListHeaderComponent={
           <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title">Discover.</ThemedText>
+            <ThemedText type="title">Questions.</ThemedText>
+            <ThemedButton
+              type="small"
+              textType="description"
+              onPress={handleAddQuestion}
+              icon={<Ionicons name="add" color="white" size={24} />}
+            >
+              Add
+            </ThemedButton>
           </ThemedView>
         }
         onEndReached={() =>
@@ -80,6 +98,8 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   stepContainer: {
     gap: 8,

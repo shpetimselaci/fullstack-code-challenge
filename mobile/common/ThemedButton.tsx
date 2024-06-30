@@ -7,7 +7,7 @@ import {
 } from "react-native";
 
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { ThemedText } from "./ThemedText";
+import { ThemedText, ThemedTextProps } from "./ThemedText";
 import { Colors } from "@/constants/Colors";
 import { ReactElement, ReactNode } from "react";
 
@@ -17,7 +17,7 @@ export type ThemedButton = TouchableOpacityProps & {
   loading?: boolean;
   type?: "default" | "lg" | "xl" | "small";
   icon?: ReactNode;
-  textType?: "default" | "title" | "defaultSemiBold" | "subtitle" | "link";
+  textType?: ThemedTextProps["type"];
 };
 
 export function ThemedButton({
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   small: {
-    paddingHorizontal: 8,
+    paddingHorizontal: 16,
     paddingVertical: 4,
   },
 });

@@ -94,6 +94,7 @@ function QuestionScreen() {
         ListHeaderComponent={
           <ThemedView>
             <Question
+              size="large"
               type="borderless"
               authorName={uiStore.selectedQuestion?.author.name}
               title={local.title as string}

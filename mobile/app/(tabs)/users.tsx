@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  Image,
-  ListRenderItem,
-  StyleSheet,
-} from "react-native";
+import { ActivityIndicator, ListRenderItem, StyleSheet } from "react-native";
 
 import { HelloWave } from "@/common/HelloWave";
 import { ThemedText } from "@/common/ThemedText";
@@ -31,7 +26,7 @@ const User: ListRenderItem<UsersQuery["users"][0]> = ({ item }) => {
 };
 
 export default function UsersScreen() {
-  const { loading, error, data, refetch, fetchMore } = useQuery(GET_USERS, {
+  const { loading, data, refetch, fetchMore } = useQuery(GET_USERS, {
     variables: { offset: 0, limit: 10 },
   });
 
@@ -64,7 +59,7 @@ export default function UsersScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flexGrow: 1, paddingHorizontal: 10 },
+  container: { flexGrow: 1, paddingHorizontal: 10, paddingTop: 30 },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",

@@ -21,7 +21,11 @@ import uiStore from "@/store/mobx/uiStore";
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-const Layout = () => {
+export const unstable_settings = {
+  initialRouteName: "auth",
+};
+
+export default function Layout() {
   const colorScheme = useColorScheme();
   const [loaded] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
@@ -70,7 +74,7 @@ const Layout = () => {
                   headerShown: false,
                 }}
               />
-                <Stack.Screen
+              <Stack.Screen
                 name="question/new"
                 options={{
                   presentation: "fullScreenModal",
@@ -87,6 +91,4 @@ const Layout = () => {
       </ApolloProvider>
     </GestureHandlerRootView>
   );
-};
-
-export default Layout;
+}

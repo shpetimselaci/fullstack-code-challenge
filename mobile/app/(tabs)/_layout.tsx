@@ -5,7 +5,11 @@ import { TabBarIcon } from "@/common/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 
-function TabLayout() {
+export const unstable_settings = {
+  initialRouteName: "index",
+};
+
+export default function Layout() {
   const colorScheme = useColorScheme();
 
   return (
@@ -19,10 +23,10 @@ function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Explore",
+          title: "Questions",
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? "home" : "home-outline"}
+              name={focused ? "search" : "search-outline"}
               color={color}
             />
           ),
@@ -52,5 +56,3 @@ function TabLayout() {
     </Tabs>
   );
 }
-
-export default TabLayout;

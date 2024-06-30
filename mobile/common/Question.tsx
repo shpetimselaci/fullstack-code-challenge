@@ -5,18 +5,36 @@ import { ThemedText } from "./ThemedText";
 import { StyleSheet } from "react-native";
 
 export const Question: React.FC<{
+  size?: "large" | "default";
   authorName?: string;
   title: string;
   description: string;
   onAvatarPress?: () => void;
   onPress?: () => void;
-  type?: 'default' | 'borderless'
-}> = ({ authorName, title, description, onAvatarPress, onPress, type = 'default' }) => {
+  type?: "default" | "borderless";
+}> = ({
+  size,
+  authorName,
+  title,
+  description,
+  onAvatarPress,
+  onPress,
+  type = "default",
+}) => {
   return (
     <TouchableOpacity style={[styles.opacity, styles[type]]} onPress={onPress}>
       <ThemedView style={styles.titleContainer}>
-        <Avatar size={32} name={authorName} onPress={onAvatarPress} />
-        <ThemedText style={styles.title}>{authorName}</ThemedText>
+        <Avatar
+          size={size == "large" ? 48 : 32}
+          name={authorName}
+          onPress={onAvatarPress}
+        />
+        <ThemedText
+          type={size == "large" ? "subtitle" : "default"}
+          style={styles.title}
+        >
+          {authorName}
+        </ThemedText>
       </ThemedView>
       <ThemedText type="link">{title}</ThemedText>
       <ThemedText type="description">{description}</ThemedText>
@@ -35,9 +53,7 @@ const styles = StyleSheet.create({
   default: {
     borderWidth: 1,
   },
-  borderless: {
-
-  },
+  borderless: {},
   titleContainer: { flexDirection: "row", flexGrow: 1, alignItems: "center" },
   title: { marginLeft: 4 },
 });
