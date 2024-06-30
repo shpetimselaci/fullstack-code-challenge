@@ -70,6 +70,13 @@ const Layout = () => {
                   headerShown: false,
                 }}
               />
+                <Stack.Screen
+                name="question/new"
+                options={{
+                  presentation: "fullScreenModal",
+                  headerShown: false,
+                }}
+              />
               <Stack.Screen
                 name="+not-found"
                 options={{ headerShown: false }}

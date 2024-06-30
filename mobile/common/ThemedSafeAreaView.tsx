@@ -20,5 +20,11 @@ export function ThemedSafeAreaView({
     "background"
   );
 
-  return <SafeAreaView {...rest} style={[style, { backgroundColor }]} />;
+  return (
+    <SafeAreaView
+      {...rest}
+      style={[style, { backgroundColor }]}
+      edges={["top"]}
+    />
+  );
 }

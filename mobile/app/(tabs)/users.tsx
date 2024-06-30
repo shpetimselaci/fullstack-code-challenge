@@ -51,10 +51,7 @@ export default function UsersScreen() {
         }
         ListHeaderComponent={() => (
           <ThemedView style={styles.titleContainer}>
-            <ThemedText type="subtitle">
-              List of users to reach out to.
-            </ThemedText>
-            <HelloWave />
+            <ThemedText type="title">Reach out.</ThemedText>
           </ThemedView>
         )}
         stickyHeaderIndices={[0]}
@@ -73,7 +70,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 2,
     paddingVertical: 10,
-    borderBottomWidth: 1,
   },
   stepContainer: {
     gap: 8,

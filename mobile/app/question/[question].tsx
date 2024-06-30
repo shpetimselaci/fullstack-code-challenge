@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet } from "react-native";
+import { ActivityIndicator, FlatListProps, StyleSheet } from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import {
@@ -23,7 +23,12 @@ function Answers({
   loading,
   error,
   data,
-}: QueryResult<QuestionAnswersQuery, QuestionAnswersQueryVariables>) {
+  ListHeaderComponent,
+}: QueryResult<QuestionAnswersQuery, QuestionAnswersQueryVariables> &
+  Pick<
+    FlatListProps<QuestionAnswersQuery["questionAnswers"][number]>,
+    "ListHeaderComponent"
+  >) {
   const navigation = useNavigation();
 
   const handleAvatarPress = (
@@ -51,6 +56,8 @@ function Answers({
   return (
     <FlatList
       data={data?.questionAnswers}
+      ListHeaderComponent={ListHeaderComponent}
+      contentContainerStyle={styles.list}
       renderItem={({ item }) => (
         <Answer
           onAvatarPress={() => handleAvatarPress(item.author)}
@@ -60,6 +67,7 @@ function Answers({
           key={item.id}
         />
       )}
+      stickyHeaderIndices={[0]}
       ListEmptyComponent={
         <ThemedView>
           <ThemedText>No answers done yet!!</ThemedText>
@@ -82,15 +90,21 @@ function QuestionScreen() {
         <HeaderBack />
         <Menu onPress={() => {}} />
       </ThemedView>
-      <Question
-        type="borderless"
-        authorName={uiStore.selectedQuestion?.author.name}
-        title={local.title as string}
-        description={local.description as string}
-        onAvatarPress={() => {}}
-        onPress={() => {}}
+      <Answers
+        ListHeaderComponent={
+          <ThemedView>
+            <Question
+              type="borderless"
+              authorName={uiStore.selectedQuestion?.author.name}
+              title={local.title as string}
+              description={local.description as string}
+              onAvatarPress={() => {}}
+              onPress={() => {}}
+            />
+          </ThemedView>
+        }
+        {...queryResult}
       />
-      <Answers {...queryResult} />
     </ThemedSafeAreaView>
   );
 }
@@ -110,5 +124,8 @@ const styles = StyleSheet.create({
   actionContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  list: {
+    paddingBottom: 80,
   },
 });

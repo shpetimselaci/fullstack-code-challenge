@@ -8,7 +8,7 @@ import { GET_QUESTIONS } from "@/store/graphql/queries";
 import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { ThemedSafeAreaView } from "@/common/ThemedSafeAreaView";
 import { QuestionsQuery } from "@/gql/__generated__/graphql";
-import { useNavigation, Link } from "expo-router";
+import { useNavigation } from "expo-router";
 import { Question } from "@/common/Question";
 import { useContext } from "react";
 import { GlobalContext } from "@/store/context/global";
@@ -33,13 +33,10 @@ export default function HomeScreen() {
   };
 
   return (
-    <ThemedSafeAreaView>
-      <Image
-        source={require("@/assets/images/otter.png")}
-        style={[styles.otter]}
-      />
+    <ThemedSafeAreaView style={styles.container}>
       <FlatList
         data={data?.questions}
+        style={styles.list}
         renderItem={({ item }) => (
           <Question
             authorName={item.author.name}
@@ -61,8 +58,7 @@ export default function HomeScreen() {
         }
         ListHeaderComponent={
           <ThemedView style={styles.titleContainer}>
-            <ThemedText type="title">Questions from people!!</ThemedText>
-            <HelloWave />
+            <ThemedText type="title">Discover.</ThemedText>
           </ThemedView>
         }
         onEndReached={() =>
@@ -74,11 +70,16 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    paddingHorizontal: 10,
+    paddingTop: 30,
+  },
+  list: {
+    flexGrow: 1,
+  },
   titleContainer: {
     flexDirection: "row",
-    alignItems: "center",
-    gap: 2,
-    padding: 24,
   },
   stepContainer: {
     gap: 8,

@@ -1,10 +1,10 @@
-import FontAwesome from "@expo/vector-icons/FontAwesome5";
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { ThemedButton } from "./ThemedButton";
 
 export function Menu({ onPress }: { onPress: () => void }) {
   return (
     <ThemedButton
-      icon={<FontAwesome name="" size={24} />}
+      icon={<MaterialCommunityIcons name="dots-horizontal" size={24} color="black" />}
       onPress={onPress}
       type="default"
       lightColor="transparent"

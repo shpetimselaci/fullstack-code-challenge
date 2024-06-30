@@ -1,4 +1,9 @@
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatListProps,
+  StyleSheet,
+  View,
+} from "react-native";
 import { useLocalSearchParams, useNavigation } from "expo-router";
 import { ThemedView } from "@/common/ThemedView";
 import { ThemedText } from "@/common/ThemedText";
@@ -20,7 +25,13 @@ import { Question } from "@/common/Question";
 import { Answer } from "@/common/Answer";
 import { GlobalContext } from "@/store/context/global";
 
-function UserQuestionsTab({ userId }: { userId: number }) {
+function UserQuestionsTab({
+  userId,
+  ListHeaderComponent,
+}: { userId: number } & Pick<
+  FlatListProps<UserQuestionsQuery["userQuestions"][number]>,
+  "ListHeaderComponent"
+>) {
   const { uiStore } = useContext(GlobalContext);
   const { loading, data, error } = useQuery(GET_USER_QUESTIONS, {
     variables: { userId, limit: 10, offset: 0 },
@@ -59,6 +70,7 @@ function UserQuestionsTab({ userId }: { userId: number }) {
   return (
     <FlatList
       data={data?.userQuestions}
+      contentContainerStyle={styles.list}
       renderItem={({ item }) => (
         <Question
           authorName={item.author.name}
@@ -79,7 +91,13 @@ function UserQuestionsTab({ userId }: { userId: number }) {
   );
 }
 
-function UserAnswersTab({ userId }: { userId: number }) {
+function UserAnswersTab({
+  userId,
+  ListHeaderComponent,
+}: { userId: number } & Pick<
+  FlatListProps<UserAnswersQuery["userAnswers"][number]>,
+  "ListHeaderComponent"
+>) {
   const navigation = useNavigation();
   const { uiStore } = useContext(GlobalContext);
   const { loading, data, error } = useQuery(GET_USER_ANSWERS, {
@@ -87,13 +105,13 @@ function UserAnswersTab({ userId }: { userId: number }) {
   });
 
   const handleAvatarPress = (
-    item: UserAnswersQuery["userAnswers"][0]["author"]
+    item: UserAnswersQuery["userAnswers"][number]["author"]
   ) => {
     console.warn(item);
     // @ts-ignore-next-line
     navigation.navigate({ name: `user/[user]`, params: item });
   };
-  const handleAnswerPress = (item: UserAnswersQuery["userAnswers"][0]) => {
+  const handleAnswerPress = (item: UserAnswersQuery["userAnswers"][number]) => {
     uiStore.selectedQuestion = item.question;
     // @ts-ignore-next-line problems with expo having the typed router
     navigation.navigate({
@@ -120,6 +138,7 @@ function UserAnswersTab({ userId }: { userId: number }) {
   return (
     <FlatList
       style={styles.tab}
+      contentContainerStyle={styles.list}
       data={data?.userAnswers}
       renderItem={({ item }) => (
         <Answer
@@ -162,31 +181,38 @@ export default function UserScreen() {
     setActiveTab(tab as (typeof tabs)[number]);
   };
 
+  const header = (
+    <ThemedView style={{ flexShrink: 0, paddingHorizontal: 12 }}>
+      <Avatar size={96} name={local.name!} />
+      <ThemedText type="subtitle">{local.name}</ThemedText>
+
+      <ThemedText>
+        <ThemedText type="defaultSemiBold">
+          {formatDistanceToNow(local.birthday!)} old (
+          {format(local.birthday!, "MM-dd-yyyy")}).
+        </ThemedText>
+      </ThemedText>
+      <ThemedText>
+        Joined the clinic at{" "}
+        <ThemedText type="defaultSemiBold">
+          {format(fromUnixTime(Number(local.createdAt)), "MMM d 'at' h:m a")}
+        </ThemedText>
+      </ThemedText>
+      <ThemedTabs
+        defaultTab={activeTab}
+        onTabPress={handleActiveTab}
+        tabs={tabs}
+      />
+    </ThemedView>
+  );
+
   return (
     <ThemedSafeAreaView style={styles.container}>
       <ThemedView style={styles.titleContainer}>
         <HeaderBack />
-
-        <ThemedText type="subtitle">User information</ThemedText>
       </ThemedView>
+      {header}
       <ThemedView style={styles.contentContainer}>
-        <Avatar size={96} name={local.name!} />
-        <ThemedText type="subtitle">{local.name}</ThemedText>
-
-        <ThemedText>
-          <ThemedText type="defaultSemiBold">
-            {formatDistanceToNow(local.birthday!)} old (
-            {format(local.birthday!, "MM-dd-yyyy")}).
-          </ThemedText>
-        </ThemedText>
-        <ThemedText>
-          Joined the clinic at{" "}
-          <ThemedText type="defaultSemiBold">
-            {format(fromUnixTime(Number(local.createdAt)), "MMM d 'at' h:m a")}
-          </ThemedText>
-        </ThemedText>
-        <ThemedTabs onTabPress={handleActiveTab} tabs={tabs} />
-
         <DisplayOnlyOne show={activeTab === tabs[0]}>
           <UserQuestionsTab userId={userId} />
         </DisplayOnlyOne>
@@ -199,19 +225,24 @@ export default function UserScreen() {
 }
 
 const styles = StyleSheet.create({
-  tab: {},
+  tab: {
+    flex: 1,
+  },
   container: {
     flexGrow: 1,
     paddingHorizontal: 10,
   },
   contentContainer: {
-    paddingTop: 24,
+    flexGrow: 1,
     paddingHorizontal: 10,
-    gap: 4,
   },
   titleContainer: {
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth: 1,
+  },
+  list: {
+    flexGrow: 1,
+    paddingTop: 10,
+    paddingBottom: 30,
   },
 });
