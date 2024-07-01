@@ -25,7 +25,10 @@ import { HeaderBack } from "@/common/navigation/HeaderBack";
 import { Menu } from "@/common/ActionMenu";
 import { AnswerForm } from "@/forms/Answer";
 import { useAnswerForm } from "@/hooks/forms/useAnswerForm";
-import { DELETE_QUESTION } from "@/store/graphql/mutations";
+import { DELETE_ANSWER, DELETE_QUESTION } from "@/store/graphql/mutations";
+import { useActionSheet } from "@/hooks/useActionSheet";
+import { useAnswerActionSheet } from "@/hooks/actionsheets/useAnswerActionSheet";
+import { useQuestionActionSheet } from "@/hooks/actionsheets/useQuestionActionSheet";
 
 const NewAnswer = React.memo(function NewAnswer({
   questionId,
@@ -54,20 +57,21 @@ function Answers({
   refetch,
   fetchMore,
   data,
+  onAvatarPress,
+  onAnswerLongPress,
   ListHeaderComponent,
 }: QueryResult<QuestionAnswersQuery, QuestionAnswersQueryVariables> &
   Pick<
     FlatListProps<QuestionAnswersQuery["questionAnswers"][number]>,
     "ListHeaderComponent"
-  >) {
-  const navigation = useNavigation();
-  const handleAvatarPress = (
-    item: QuestionAnswersQuery["questionAnswers"][0]["author"]
-  ) => {
-    // @ts-ignore-next-line
-    navigation.navigate({ name: `user/[user]`, params: item });
-  };
-
+  > & {
+    onAvatarPress: (
+      item: QuestionAnswersQuery["questionAnswers"][number]["author"]
+    ) => void;
+    onAnswerLongPress: (
+      item: QuestionAnswersQuery["questionAnswers"][number]
+    ) => void;
+  }) {
   if (loading) {
     return (
       <ThemedText>
@@ -100,7 +104,8 @@ function Answers({
       contentContainerStyle={styles.list}
       renderItem={({ item }) => (
         <Answer
-          onAvatarPress={() => handleAvatarPress(item.author)}
+          onAvatarPress={() => onAvatarPress(item.author)}
+          onLongPress={() => onAnswerLongPress(item)}
           answer={item.answer}
           question={item.question}
           authorName={item.author.name}
@@ -121,15 +126,14 @@ function Answers({
   );
 }
 
-const actionMenuItems = [
-  { label: "Cancel", value: "cancel" },
-
-  { label: "Edit post", value: "edit" },
-  { label: "Delete post", value: "delete" },
-];
-
 const SelectedQuestion = observer(
-  ({ selectedQuestion }: { selectedQuestion: QuestionType }) => {
+  ({
+    selectedQuestion,
+    onAvatarPress,
+  }: {
+    selectedQuestion: QuestionType;
+    onAvatarPress: (item: QuestionType["author"]) => void;
+  }) => {
     return (
       <ThemedView>
         <Question
@@ -139,8 +143,7 @@ const SelectedQuestion = observer(
           authorName={selectedQuestion?.author.name}
           title={selectedQuestion.title as string}
           description={selectedQuestion.description as string}
-          onAvatarPress={() => {}}
-          onPress={() => {}}
+          onAvatarPress={() => onAvatarPress(selectedQuestion.author)}
         />
       </ThemedView>
     );
@@ -155,47 +158,35 @@ function QuestionScreen() {
   const queryResult = useQuery(GET_QUESTION_ANSWERS, {
     variables: { questionAnswersId },
   });
-  const [deleteMutation] = useMutation(DELETE_QUESTION, {
-    variables: { questionId: questionAnswersId },
-    refetchQueries: [
-      { query: GET_QUESTION_ANSWERS, variables: { questionAnswersId } },
-    ],
-  });
 
-  const handleOnPress = async (
-    item: ComponentProps<typeof Menu>["items"][number]
+  const handleAnswerOnLongPress = useAnswerActionSheet({ questionAnswersId });
+
+  const handleActions = useQuestionActionSheet({
+    questionAnswersId,
+  });
+  const handleAvatarPress = (
+    item: QuestionAnswersQuery["questionAnswers"][0]["author"]
   ) => {
-    switch (item.value) {
-      case "delete": {
-        await deleteMutation();
-        navigation.goBack();
-        break;
-      }
-      case "edit": {
-        // @ts-ignore-next-line
-        navigation.navigate({ name: "question/new", params: { edit: true } });
-      }
-      default: {
-        break;
-      }
-    }
+    // @ts-ignore-next-line
+    navigation.navigate({ name: `user/[user]`, params: item });
   };
+
   return (
     <ThemedSafeAreaView style={styles.container} edges={["top", "bottom"]}>
       <ThemedView style={styles.actionContainer}>
         <HeaderBack />
         {selectedQuestion.author.id === auth?.user?.id && (
-          <Menu
-            onPress={handleOnPress}
-            items={actionMenuItems}
-            cancelButtonIndex={0}
-            destructiveButtonIndex={2}
-          />
+          <Menu onPress={handleActions} />
         )}
       </ThemedView>
       <Answers
+        onAvatarPress={handleAvatarPress}
+        onAnswerLongPress={handleAnswerOnLongPress}
         ListHeaderComponent={
-          <SelectedQuestion selectedQuestion={selectedQuestion} />
+          <SelectedQuestion
+            selectedQuestion={selectedQuestion}
+            onAvatarPress={handleAvatarPress}
+          />
         }
         {...queryResult}
       />

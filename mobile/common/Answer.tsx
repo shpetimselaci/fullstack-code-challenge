@@ -9,6 +9,7 @@ import { formatDistance } from "date-fns";
 export const Answer: React.FC<{
   onAvatarPress: () => void;
   onPress?: () => void;
+  onLongPress?: () => void;
   authorName: string;
   answer: string;
   createdAt: number;
@@ -26,11 +27,16 @@ export const Answer: React.FC<{
   createdAt,
   onAvatarPress,
   onPress,
+  onLongPress,
   question,
   replyTo,
 }) => {
   return (
-    <TouchableOpacity style={styles.opacity} onPress={onPress}>
+    <TouchableOpacity
+      style={styles.opacity}
+      onPress={onPress}
+      onLongPress={onLongPress}
+    >
       {replyTo ? (
         <ThemedView style={styles.replyContainer}>
           <Ionicons

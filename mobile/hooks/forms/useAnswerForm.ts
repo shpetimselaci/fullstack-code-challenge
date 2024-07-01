@@ -53,7 +53,7 @@ export const useAnswerForm = (props: {
         await mutation({ variables: values });
         callBackFn?.();
       } catch (error) {
-        console.warn("here", error);
+        //
       }
     });
 
