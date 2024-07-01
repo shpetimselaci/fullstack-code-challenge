@@ -10,13 +10,15 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. Copy .env.example to .env. Make sure your network IP is set in place as seen in the example.
+
+3. Start the app
 
    ```bash
     npx expo start
    ```
 
-3. To start generating types for Apollo graphql
+4. To start generating types for Apollo graphql
 
    ```bash
     npm run compile:types

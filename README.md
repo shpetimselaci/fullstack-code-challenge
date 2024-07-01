@@ -1,10 +1,19 @@
+# To run
+
+```bash
+docker compose build
+docker compose up
+```
+
+### CHALLENGE
+
 # Limbic Fullstack Code Challenge
 
 This is Limbic’s FullStack Challenge that combines bits from the frontend and backend challenges in one.
 
 Jane is a clinical therapist and wants her clients to answer simple questionnaires in order to better understand them. She needs a way to add/delete/edit questions and also see the answers of each client.
 
-## Backend 
+## Backend
 
 You are tasked with writing an API to create/edit/delete Users, Questions, and Answers. It should be a NodeJS/ExpressJS server with the following endpoints:
 
@@ -61,7 +70,6 @@ You are tasked with writing a React/React Native app to consume the backend API.
 🏆 **BIG PLUS:**
 
 You can use anything you want for state management. We use MobX and the Context API a lot so it's a big plus if you can also **implement some/all of the state handling with MobX and Context API**.
-
 
 ## Instructions
 
