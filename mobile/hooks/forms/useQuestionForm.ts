@@ -1,15 +1,12 @@
 import * as z from "zod";
-import {
-  AddQuestionMutationVariables,
-  Question,
-} from "@/gql/__generated__/graphql";
+import { AddQuestionMutationVariables } from "@/gql/__generated__/graphql";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useContext } from "react";
-import { GlobalContext } from "@/store/context/global";
 import { useMutation } from "@apollo/client";
 import { ADD_QUESTION, EDIT_QUESTION } from "@/store/graphql/mutations";
-import { GET_QUESTIONS } from "@/store/graphql/queries";
+import { GET_QUESTIONS, GET_QUESTION_ANSWERS } from "@/store/graphql/queries";
+import { useContext } from "react";
+import { GlobalContext } from "@/store/context/global";
 
 const schema = z
   .object({
@@ -22,13 +19,28 @@ export const useQuestionForm = (props: {
   defaultValues: (AddQuestionMutationVariables & { id?: number }) | null;
   edit?: boolean;
 }) => {
+  const { uiStore } = useContext(GlobalContext);
   const addQueryMutation = useMutation(ADD_QUESTION, {
     refetchQueries: [GET_QUESTIONS],
   });
 
   const editQueryMutation = useMutation(EDIT_QUESTION, {
-    variables: { questionAnswersId: props.defaultValues?.id },
-    refetchQueries: [GET_QUESTIONS],
+    variables: { questionId: props.defaultValues?.id },
+    refetchQueries: [
+      GET_QUESTIONS,
+      {
+        query: GET_QUESTION_ANSWERS,
+        variables: { questionAnswersId: props.defaultValues?.id },
+      },
+    ],
+    onCompleted(data) {
+      if (
+        data.editQuestion?.id &&
+        uiStore.selectedQuestion?.id == data.editQuestion?.id
+      ) {
+        uiStore.setSelectedQuestion(data.editQuestion);
+      }
+    },
   });
 
   const form = useForm({
@@ -43,6 +55,7 @@ export const useQuestionForm = (props: {
     form.handleSubmit(async (values) => {
       try {
         const { data } = await mutation({ variables: values });
+
         callBackFn?.(data);
       } catch (error) {}
     });

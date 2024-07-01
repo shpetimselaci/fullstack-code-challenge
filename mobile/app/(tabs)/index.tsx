@@ -49,6 +49,7 @@ export default function HomeScreen() {
         style={styles.list}
         renderItem={({ item }) => (
           <Question
+            createdAt={item.createdAt}
             authorName={item.author.name}
             onPress={() => handleQuestionPress(item)}
             onAvatarPress={() => handleAvatarPress(item)}

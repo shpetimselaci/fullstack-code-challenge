@@ -14,7 +14,7 @@ import {
 import { ThemedText } from "@/common/ThemedText";
 import { QueryResult, useMutation, useQuery } from "@apollo/client";
 import { GET_QUESTION_ANSWERS } from "@/store/graphql/queries";
-import { FlatList } from "react-native-gesture-handler";
+import { FlatList, RefreshControl } from "react-native-gesture-handler";
 import { Answer } from "@/common/Answer";
 import { ThemedView } from "@/common/ThemedView";
 import { Question } from "@/common/Question";
@@ -51,6 +51,8 @@ const NewAnswer = React.memo(function NewAnswer({
 function Answers({
   loading,
   error,
+  refetch,
+  fetchMore,
   data,
   ListHeaderComponent,
 }: QueryResult<QuestionAnswersQuery, QuestionAnswersQueryVariables> &
@@ -86,6 +88,15 @@ function Answers({
       data={data?.questionAnswers}
       style={{ height: "100%" }}
       ListHeaderComponent={ListHeaderComponent}
+      refreshControl={
+        <RefreshControl
+          refreshing={loading}
+          onRefresh={() => refetch({ limit: 10, offset: 0 })}
+        />
+      }
+      ListFooterComponent={
+        <ActivityIndicator animating={loading} hidesWhenStopped />
+      }
       contentContainerStyle={styles.list}
       renderItem={({ item }) => (
         <Answer
@@ -102,6 +113,9 @@ function Answers({
         <ThemedView>
           <ThemedText>No answers done yet!!</ThemedText>
         </ThemedView>
+      }
+      onEndReached={() =>
+        fetchMore({ variables: { offset: data?.questionAnswers?.length } })
       }
     />
   );
@@ -121,6 +135,7 @@ const SelectedQuestion = observer(
         <Question
           size="large"
           type="borderless"
+          createdAt={selectedQuestion.createdAt}
           authorName={selectedQuestion?.author.name}
           title={selectedQuestion.title as string}
           description={selectedQuestion.description as string}

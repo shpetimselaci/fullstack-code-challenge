@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   titleContainer: {
-    paddingLeft: 6,
+    marginLeft: 10,
     flexShrink: 1,
   },
   icon: { marginRight: 4 },

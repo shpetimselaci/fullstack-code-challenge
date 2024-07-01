@@ -8,7 +8,7 @@ import { GET_QUESTION_ANSWERS } from "@/store/graphql/queries";
 
 const schema = z
   .object({
-    answer: z.string().min(3),
+    answer: z.string().min(1),
   })
   .required();
 
@@ -53,7 +53,7 @@ export const useAnswerForm = (props: {
         await mutation({ variables: values });
         callBackFn?.();
       } catch (error) {
-        //
+        console.warn("here", error);
       }
     });
 

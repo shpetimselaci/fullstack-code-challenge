@@ -17,9 +17,12 @@ function NewQuestionScreen() {
   const edit = selectedQuestion != null;
   const { control, handleSubmit, loading } = useQuestionForm({
     defaultValues: uiStore.selectedQuestion,
+    edit,
   });
 
-  const onSubmit = handleSubmit(() => navigation.goBack());
+  const onSubmit = handleSubmit(() => {
+    navigation.goBack();
+  });
 
   return (
     <ThemedSafeAreaView style={styles.container}>

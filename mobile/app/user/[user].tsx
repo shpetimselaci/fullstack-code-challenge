@@ -77,6 +77,7 @@ function UserQuestionsTab({
           onPress={() => handleQuestionPress(item)}
           onAvatarPress={() => handleAvatarPress(item)}
           title={item.title}
+          createdAt={item.createdAt}
           description={item.description}
           key={item.id}
         />

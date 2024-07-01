@@ -7,6 +7,10 @@ class UIStore {
   constructor() {
     makeAutoObservable(this);
   }
+
+  setSelectedQuestion(question: Question) {
+    this.selectedQuestion = question;
+  }
 }
 
 export default new UIStore();
