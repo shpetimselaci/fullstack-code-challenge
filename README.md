@@ -1,9 +1,22 @@
+# Starting off
+
+Make sure you have docker & docker-compose installed in your machine.
+I'm using a mac, so I've utilized colima, docker, and docker compose installed by [brew](https://brew.sh/) using these links:
+
+```bash
+brew install colima
+brew install docker docker-compose
+```
+
 # To run
 
 ```bash
+colima start
 docker compose build
 docker compose up
 ```
+
+It will automatically setup the db instance, seed, and whatever you need to just open up the app!
 
 ### CHALLENGE
 
