@@ -13,6 +13,7 @@ export function ThemedSafeAreaView({
   lightColor,
   darkColor,
   style,
+  edges = ["top"],
   ...rest
 }: ThemedSafeAreaViewProps) {
   const backgroundColor = useThemeColor(
@@ -24,7 +25,7 @@ export function ThemedSafeAreaView({
     <SafeAreaView
       {...rest}
       style={[style, { backgroundColor }]}
-      edges={["top"]}
+      edges={edges}
     />
   );
 }

@@ -147,6 +147,7 @@ function UserAnswersTab({
           answer={item.answer}
           question={item.question}
           authorName={item.author.name}
+          createdAt={item.createdAt}
           replyTo
           key={item.id}
         />

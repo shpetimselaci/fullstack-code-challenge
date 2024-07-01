@@ -14,7 +14,8 @@ export type ThemedTextProps = TextProps & {
     | "subtitle"
     | "link"
     | "author"
-    | "error";
+    | "error"
+    | "small";
 };
 
 export function ThemedText({
@@ -61,6 +62,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 20,
     fontWeight: "800",
+  },
+  small: {
+    fontSize: 12,
+    lineHeight: 20,
   },
   error: {
     fontSize: 12,

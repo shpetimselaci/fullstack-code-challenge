@@ -1,5 +1,8 @@
 import * as z from "zod";
-import { AddQuestionMutationVariables } from "@/gql/__generated__/graphql";
+import {
+  AddQuestionMutationVariables,
+  Question,
+} from "@/gql/__generated__/graphql";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useContext } from "react";
@@ -36,11 +39,11 @@ export const useQuestionForm = (props: {
     ? editQueryMutation
     : addQueryMutation;
 
-  const handleSubmit = (callBackFn?: () => void) =>
+  const handleSubmit = (callBackFn?: (values: typeof schema._type) => void) =>
     form.handleSubmit(async (values) => {
       try {
-        await mutation({ variables: values });
-        callBackFn?.();
+        const { data } = await mutation({ variables: values });
+        callBackFn?.(data);
       } catch (error) {}
     });
 

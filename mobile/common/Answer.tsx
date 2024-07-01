@@ -4,12 +4,14 @@ import { Avatar } from "./Avatar";
 import { ThemedText } from "./ThemedText";
 import { StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { formatDistance } from "date-fns";
 
 export const Answer: React.FC<{
   onAvatarPress: () => void;
   onPress?: () => void;
   authorName: string;
   answer: string;
+  createdAt: number;
   question?: {
     title: string;
     description: string;
@@ -21,6 +23,7 @@ export const Answer: React.FC<{
 }> = ({
   authorName,
   answer,
+  createdAt,
   onAvatarPress,
   onPress,
   question,
@@ -38,11 +41,23 @@ export const Answer: React.FC<{
           <ThemedText type="author">{question?.author.name}</ThemedText>
         </ThemedView>
       ) : null}
-      <ThemedView style={styles.titleContainer}>
+      <ThemedView style={styles.answerContainer}>
         <Avatar size={32} name={authorName} onPress={onAvatarPress} />
-        <ThemedText style={styles.title}>{authorName}</ThemedText>
+        <ThemedView style={styles.titleContainer}>
+          <ThemedText>
+            <ThemedText type="author">{authorName}</ThemedText>
+            <ThemedText type="small">
+              {" · "}
+              <ThemedText type="small">
+                {formatDistance(new Date(createdAt), new Date())}
+              </ThemedText>
+            </ThemedText>
+          </ThemedText>
+          <ThemedText type="description" lineBreakMode="head">
+            {answer}
+          </ThemedText>
+        </ThemedView>
       </ThemedView>
-      <ThemedText type="description">{answer}</ThemedText>
     </TouchableOpacity>
   );
 };
@@ -58,11 +73,13 @@ const styles = StyleSheet.create({
   },
   replyContainer: { flexDirection: "row", flexGrow: 1, marginBottom: 4 },
 
-  titleContainer: {
+  answerContainer: {
     flexDirection: "row",
     flexGrow: 1,
-    alignItems: "center",
   },
-  title: { marginLeft: 6 },
+  titleContainer: {
+    paddingLeft: 6,
+    flexShrink: 1,
+  },
   icon: { marginRight: 4 },
 });

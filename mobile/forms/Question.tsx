@@ -2,12 +2,13 @@ import { ThemedView } from "@/common/ThemedView";
 import { ThemedInput } from "@/common/ThemedInput";
 import { useQuestionForm } from "@/hooks/forms/useQuestionForm";
 import { Controller } from "react-hook-form";
+import { StyleSheet } from "react-native";
 
 export function QuestionForm({
   control,
 }: Pick<ReturnType<typeof useQuestionForm>, "control">) {
   return (
-    <ThemedView style={{ paddingTop: 20 }}>
+    <ThemedView style={styles.inputContainer}>
       <Controller
         control={control}
         rules={{
@@ -37,6 +38,7 @@ export function QuestionForm({
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            multiline
             error={fieldState?.error?.message}
           />
         )}
@@ -45,3 +47,7 @@ export function QuestionForm({
     </ThemedView>
   );
 }
+
+const styles = StyleSheet.create({
+  inputContainer: { paddingTop: 20 },
+});

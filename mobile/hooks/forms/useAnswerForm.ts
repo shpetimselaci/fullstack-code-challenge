@@ -13,15 +13,15 @@ const schema = z
   .required();
 
 export const useAnswerForm = (props: {
-  defaultValues: (AddAnswerMutationVariables & { id?: number }) | null;
+  defaultValues: (Partial<AddAnswerMutationVariables> & { id?: number }) | null;
   edit?: boolean;
 }) => {
   const addQueryMutation = useMutation(ADD_ANSWER, {
-    variables: { questionId: props.defaultValues?.id },
+    variables: { questionId: props.defaultValues?.questionId },
     refetchQueries: [
       {
         query: GET_QUESTION_ANSWERS,
-        variables: { questionId: props.defaultValues?.id },
+        variables: { questionAnswersId: props.defaultValues?.questionId },
       },
     ],
   });
@@ -29,12 +29,12 @@ export const useAnswerForm = (props: {
   const editQueryMutation = useMutation(EDIT_ANSWER, {
     variables: {
       id: props.defaultValues?.id,
-      questionId: props.defaultValues?.id,
+      questionId: props.defaultValues?.questionId,
     },
     refetchQueries: [
       {
         query: GET_QUESTION_ANSWERS,
-        variables: { questionId: props.defaultValues?.id },
+        variables: { questionAnswersId: props.defaultValues?.questionId },
       },
     ],
   });
@@ -47,9 +47,15 @@ export const useAnswerForm = (props: {
     ? editQueryMutation
     : addQueryMutation;
 
-  const onSubmit = form.handleSubmit((values) => {
-    mutation({ variables: values });
-  });
+  const onSubmit = (callBackFn?: () => void) =>
+    form.handleSubmit(async (values) => {
+      try {
+        await mutation({ variables: values });
+        callBackFn?.();
+      } catch (error) {
+        //
+      }
+    });
 
   return { ...form, onSubmit, loading, error, data };
 };
