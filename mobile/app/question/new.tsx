@@ -10,7 +10,7 @@ import { ThemedButton } from "@/common/ThemedButton";
 import { useQuestionForm } from "@/hooks/forms/useQuestionForm";
 import { QuestionForm } from "@/forms/Question";
 
-function QuestionScreen() {
+function NewQuestionScreen() {
   const { uiStore } = useContext(GlobalContext);
   const navigation = useNavigation();
   const selectedQuestion = uiStore.selectedQuestion;
@@ -39,7 +39,7 @@ function QuestionScreen() {
   );
 }
 
-export default observer(QuestionScreen);
+export default observer(NewQuestionScreen);
 
 const styles = StyleSheet.create({
   container: {

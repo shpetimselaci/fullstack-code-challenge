@@ -182,7 +182,7 @@ export default function UserScreen() {
   };
 
   const header = (
-    <ThemedView style={{ flexShrink: 0, paddingHorizontal: 12 }}>
+    <ThemedView style={styles.header}>
       <Avatar size={96} name={local.name!} />
       <ThemedText type="subtitle">{local.name}</ThemedText>
 
@@ -232,9 +232,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 10,
   },
+  header: { flexShrink: 0, gap: 5 },
   contentContainer: {
     flexGrow: 1,
-    paddingHorizontal: 10,
   },
   titleContainer: {
     flexDirection: "row",

@@ -13,13 +13,14 @@ export function QuestionForm({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({ field: { onChange, onBlur, value }, fieldState }) => (
           <ThemedInput
             type="title"
             placeholder="Title"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            error={fieldState?.error?.message}
           />
         )}
         name="title"
@@ -29,13 +30,14 @@ export function QuestionForm({
         rules={{
           required: true,
         }}
-        render={({ field: { onChange, onBlur, value } }) => (
+        render={({ field: { onChange, onBlur, value }, fieldState }) => (
           <ThemedInput
             type="defaultSemiBold"
             placeholder="Description"
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
+            error={fieldState?.error?.message}
           />
         )}
         name="description"

@@ -4,6 +4,7 @@ import { useThemeColor } from "@/hooks/useThemeColor";
 import { TextInput } from "react-native-gesture-handler";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
+import { Colors } from "@/constants/Colors";
 
 export type ThemedTextProps = Parameters<typeof TextInput>[0] & {
   lightColor?: string;
@@ -36,7 +37,7 @@ export function ThemedInput({
         ]}
         {...rest}
       />
-      {error ? <ThemedText>{error}</ThemedText> : null}
+      {error ? <ThemedText type="error">{error}</ThemedText> : null}
     </ThemedView>
   );
 }
@@ -63,6 +64,11 @@ const styles = StyleSheet.create({
   link: {
     lineHeight: 30,
     fontSize: 16,
-    color: "#0a7ea4",
+    color: Colors.light.link,
+  },
+  error: {
+    fontSize: 14,
+    lineHeight: 22,
+    color: Colors.light.error,
   },
 });

@@ -73,6 +73,7 @@ function Answers({
           <ThemedText>No answers done yet!!</ThemedText>
         </ThemedView>
       }
+      ListFooterComponent={}
     />
   );
 }
