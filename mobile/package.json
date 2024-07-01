@@ -8,7 +8,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "compile": "dotenv -- graphql-codegen -w",
+    "compile:types": "dotenv -- graphql-codegen -w",
     "test": "jest --watchAll",
     "lint": "expo lint"
   },
