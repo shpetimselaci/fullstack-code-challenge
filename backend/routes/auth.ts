@@ -3,6 +3,7 @@ import { validateRequest } from 'zod-express-middleware';
 import z from 'zod';
 import * as authService from '../services/auth';
 import { authErrors } from '../common/errors';
+import { httpLogger } from '../utils/loggers';
 
 const authRouter = Router();
 
@@ -15,9 +16,9 @@ authRouter.post(
   }),
   async (req, res) => {
     try {
-      const tokenAndRefreshToken = await authService.loginUser(req.body);
+      const tokensAndUser = await authService.loginUser(req.body);
 
-      return res.status(200).json(tokenAndRefreshToken);
+      return res.status(200).json(tokensAndUser);
     } catch (error) {
       let message = 'Unknown Error';
       if (error instanceof Error) message = error.message;
@@ -28,6 +29,7 @@ authRouter.post(
           break;
         }
         default: {
+          httpLogger.error(error);
           res.status(500);
         }
       }

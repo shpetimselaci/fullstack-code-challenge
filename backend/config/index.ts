@@ -11,6 +11,7 @@ const config = {
   version: environmentVariables.API_VERSION,
   secret: environmentVariables.SECRET,
   refreshSecret: environmentVariables.REFRESH_SECRET,
+  nodeEnvironment: environmentVariables.NODE_ENV,
 };
 
 export default config;

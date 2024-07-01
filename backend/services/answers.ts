@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { DEFAULT_LIMIT } from '../constants';
 import db from '../db';
 import { NonNullableObject, PaginationParams } from '../common/types';
@@ -35,6 +35,7 @@ export const listQuestionAnswers = async ({
     },
     offset: offset || 0,
     limit: limit || DEFAULT_LIMIT,
+    orderBy: [desc(answers.createdAt)],
   });
 
   return questionAnswers as NonNullableObject<typeof questionAnswers>;

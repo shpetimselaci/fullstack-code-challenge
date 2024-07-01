@@ -5,6 +5,7 @@ import { Context } from '../context';
 const resolvers: Resolvers<Context> = {
   Query: {
     questions: async (_, { limit, offset }) => {
+      console.log(limit, offset);
       return questionsService.listQuestions({ limit, offset });
     },
   },
